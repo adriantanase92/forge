@@ -1,15 +1,6 @@
 import { api } from "$db/utils.js";
 
 export const load = ({ fetch }) => {
-	const fetchPermissions = async () => {
-		return await api({
-			fetch,
-			url: "/api/permissions",
-			method: "GET",
-			errorMessage: "Problem retrieving permissions from the database."
-		});
-	};
-
 	const fetchRoles = async () => {
 		return await api({
 			fetch,
@@ -20,7 +11,6 @@ export const load = ({ fetch }) => {
 	};
 
 	return {
-		roles: fetchRoles(),
-		permissions: fetchPermissions()
+		roles: fetchRoles()
 	};
 };

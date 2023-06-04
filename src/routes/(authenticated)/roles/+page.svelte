@@ -7,43 +7,87 @@
 	import Loader from "$components/general/Loader.svelte";
 	import PermissionsList from "$components/specific/roles/PermissionsList.svelte";
 	import { api } from "$db/utils.js";
+	import { invalidate } from "$app/navigation";
+	import { onMount } from "svelte";
 
 	export let data;
+	let permissions: any[] = [];
 
-	$: ({ roles, permissions } = data);
+	$: ({ roles } = data);
 
-	const updatePermissionOptionForRole = (event: any) => {
-		console.log("event.detail: ", event.detail);
+	onMount(async () => {
+		permissions = await api({
+			fetch,
+			url: "/api/permissions",
+			method: "GET",
+			errorMessage: "Problem retrieving permissions from the database."
+		});
+	});
+
+	const updatePermissionOptionsStatesBasedOnChoice = (options: any) => {
+		let otherThingsToUpdate = {};
+
+		// daca apasa pe "read" si e "false" -> se pune si "write" pe "false"
+		if (options.permissionOption === "read" && !options.permissionOptionState) {
+			otherThingsToUpdate = {
+				["permissions.$.write"]: false
+			};
+		}
+
+		// daca apasa pe "write" si e "true" -> se verifica si "read" sa fie pe "true"
+		if (options.permissionOption === "write" && options.permissionOptionState) {
+			otherThingsToUpdate = {
+				["permissions.$.read"]: true
+			};
+		}
+
+		// daca apasa pe "write" si e "false" -> nu se intampla nimic
+		// daca apasa pe "read" si e "true" -> nu se intampla nimic
+		console.log(
+			"permissionOption, state: ",
+			options.permissionOption,
+			options.permissionOptionState
+		);
+
+		return {
+			...otherThingsToUpdate,
+			[`permissions.$.${options.permissionOption}`]:
+				options.permissionOptionState
+		};
+	};
+
+	const updatePermissionOptionForRole = async (event: any) => {
 		const roleId = event.detail.roleId;
 		const roleName = event.detail.roleName;
 		const permissionName = event.detail.permissionName;
 		const permissionOption = event.detail.permissionOption;
 		const permissionOptionState = event.detail.state;
 
-		// aici creeaza o functie care sa faca logica urmatoare:
-		// daca apasa pe "read" si e "true" -> nu se intampla nimic
-		// daca apasa pe "read" si e "false" -> se pune si "write" pe "false"
-		// daca apasa pe "write" si e "false" -> nu se intampla nimic
-		// daca apasa pe "write" si e "true" -> se verifica si "read" sa fie pe "true"
-
 		const data = {
 			filter: {
 				"id": roleId,
 				"permissions.name": permissionName
 			},
-			update: {
-				[`permissions.$.${permissionOption}`]: permissionOptionState
-			}
+			update: updatePermissionOptionsStatesBasedOnChoice({
+				roleName,
+				permissionName,
+				permissionOption,
+				permissionOptionState
+			})
 		};
 
 		try {
-			return api({
+			await api({
 				fetch,
 				url: "/api/roles",
 				method: "PATCH",
 				data,
 				errorMessage: `Problem updating the option ${permissionOption} for permission ${permissionName} on role ${roleName}.`
 			});
+
+			invalidate("/api/roles");
+
+			return;
 		} catch (error) {
 			console.error(error);
 		}
@@ -89,7 +133,11 @@
 								<span><IconPencil size={18} /></span>
 								<span>Update Name</span>
 							</button>
-							<form method="POST" action="?/delete" use:enhance={submitDeleteItem}>
+							<form
+								method="POST"
+								action="?/delete"
+								use:enhance={submitDeleteItem}
+							>
 								<input type="hidden" name="item" hidden value="role" />
 								<input type="hidden" name="id" hidden value={role.id} />
 								<input type="hidden" name="name" hidden value={role.name} />
@@ -103,7 +151,10 @@
 					<hr class="!border-t-4 mb-4" />
 					<div class="wf__list__body">
 						<h3 class="h3 mb-3 font-bold">Permissions List</h3>
-						<PermissionsList {role} on:permissionOptionChanged={updatePermissionOptionForRole} />
+						<PermissionsList
+							{role}
+							on:permissionOptionChanged={updatePermissionOptionForRole}
+						/>
 					</div>
 				</div>
 			{/each}

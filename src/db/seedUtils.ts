@@ -135,7 +135,9 @@ const generateRandomUser = (role: "client" | "intermediary"): any => {
 	};
 
 	if (role === "client") {
-		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(() => faker.string.uuid());
+		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(() =>
+			faker.string.uuid()
+		);
 
 		return {
 			...user,
@@ -153,7 +155,9 @@ export const usersList = [...admins, ...clients];
 
 /* ------- Projects ------ */
 const generateProject = (id: string): any => {
-	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(() => faker.string.uuid());
+	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(() =>
+		faker.string.uuid()
+	);
 
 	return {
 		id,
@@ -175,7 +179,7 @@ const generateTasksForProject = (id: string, projectId: string): any => ({
 	project: projectId,
 	title: faker.word.words(8),
 	priority: faker.helpers.arrayElement(["high", "medium", "low"]),
-	status: faker.helpers.arrayElement(["to do", "doing", "done", "backlog"])
+	status: faker.helpers.arrayElement(["to-do", "doing", "done", "backlog"])
 });
 
 const tasksPerProject = projectsList.map((project) => ({
@@ -185,11 +189,15 @@ const tasksPerProject = projectsList.map((project) => ({
 const formatedTasksPerProject = [
 	...tasksPerProject.flatMap((t) => {
 		const tasks: any[] = [];
-		t.tasks.forEach((id: string) => tasks.push({ taskId: id, taskProjectId: t.projectId }));
+		t.tasks.forEach((id: string) =>
+			tasks.push({ taskId: id, taskProjectId: t.projectId })
+		);
 		return tasks;
 	})
 ];
 export const tasksList = [
-	...formatedTasksPerProject.map((task) => generateTasksForProject(task.taskId, task.taskProjectId))
+	...formatedTasksPerProject.map((task) =>
+		generateTasksForProject(task.taskId, task.taskProjectId)
+	)
 ];
 /* ------- Tasks ------ */

@@ -4,7 +4,7 @@ import { fail } from "@sveltejs/kit";
 export const actions = {
 	create: async ({ request, fetch }) => {
 		const formData = await request.formData();
-
+		const id = crypto.randomUUID();
 		const name = formData.get("name");
 		const permissions = formData.get("permissions");
 
@@ -17,6 +17,7 @@ export const actions = {
 		}
 
 		const role = {
+			id,
 			name,
 			permissions: JSON.parse(permissions as any)
 		};

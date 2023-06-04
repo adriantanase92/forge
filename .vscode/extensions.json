@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "ms-vscode-remote.remote-containers",
+    "stylelint.vscode-stylelint",
+    "svelte.svelte-vscode",
+    "unifiedjs.vscode-mdx",
+    "me-dutour-mathieu.vscode-github-actions",
+    "mrmlnc.vscode-scss",
+    "redhat.vscode-yaml"
+  ]
+}

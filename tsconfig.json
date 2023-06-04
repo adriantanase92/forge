@@ -1,0 +1,39 @@
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"lib": ["ES2021", "ES2020", "ES2019", "ES2018", "ES2017", "ES2016", "ES2015", "DOM"],
+		"declaration": true,
+		"declarationMap": true,
+		"types": ["vite/client", "svelte"],
+		"moduleResolution": "node16",
+		"module": "ESNext",
+		"target": "ESNext",
+		"baseUrl": ".",
+		"paths": {
+			// name and path to aliases
+			"$lib": ["src/lib"],
+			"$lib/*": ["./src/lib/*"],
+			"$db": ["src/db"],
+			"$db/*": ["./src/db/*"],
+			"$components": ["src/lib/components"],
+			"$components/*": ["src/lib/components/*"],
+			"$utils": ["src/lib/utils"],
+			"$utils/*": ["src/lib/utils/*"],
+			"$types": ["src/lib/types"],
+			"$types/*": ["src/lib/types/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist"]
+	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+	//
+	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+	// from the referenced tsconfig.json - TypeScript does not merge them in
+}

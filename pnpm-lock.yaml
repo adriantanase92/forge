@@ -34,7 +34,7 @@ devDependencies:
     specifier: 0.5.3
     version: 0.5.3(tailwindcss@3.3.1)
   '@types/node':
-    specifier: ^20.2.3
+    specifier: 20.2.3
     version: 20.2.3
   '@typescript-eslint/eslint-plugin':
     specifier: 5.45.0
@@ -99,6 +99,9 @@ devDependencies:
   svelte2tsx:
     specifier: 0.6.14
     version: 0.6.14(svelte@3.59.1)(typescript@5.0.4)
+  sveltekit-superforms:
+    specifier: 1.0.0-rc.2
+    version: 1.0.0-rc.2(@sveltejs/kit@1.5.0)(svelte@3.59.1)(zod@3.21.4)
   tailwindcss:
     specifier: 3.3.1
     version: 3.3.1(postcss@8.4.23)(ts-node@10.9.1)
@@ -114,6 +117,9 @@ devDependencies:
   vitest:
     specifier: 0.25.3
     version: 0.25.3(sass@1.62.1)
+  zod:
+    specifier: 3.21.4
+    version: 3.21.4
 
 packages:
 
@@ -3251,6 +3257,18 @@ packages:
     resolution: {integrity: sha512-pKj8fEBmqf6mq3/NfrB9SLtcJcUvjYSWyePlfCqN9gujLB25RitWK8PvFzlwim6hD/We35KbPlRteuA6rnPGcQ==}
     engines: {node: '>= 8'}
 
+  /sveltekit-superforms@1.0.0-rc.2(@sveltejs/kit@1.5.0)(svelte@3.59.1)(zod@3.21.4):
+    resolution: {integrity: sha512-ooIAhEi/QTo9bMiL+UD1vRHNxlSUnqwW8SDImkvLKo2aCtwRLPTu6JRWnGjypdxyL+IYNEhYgirO/eooqWTKbA==}
+    peerDependencies:
+      '@sveltejs/kit': 1.x
+      svelte: 3.x
+      zod: 3.x
+    dependencies:
+      '@sveltejs/kit': 1.5.0(svelte@3.59.1)(vite@4.3.0)
+      svelte: 3.59.1
+      zod: 3.21.4
+    dev: true
+
   /svg-tags@1.0.0:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
@@ -3696,4 +3714,8 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  /zod@3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true

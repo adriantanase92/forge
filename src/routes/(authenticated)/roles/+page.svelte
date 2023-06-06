@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import { actionModal, submitDeleteItem } from "$lib/utils/helpers.js";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import AddRoleForm from "$components/specific/roles/AddRoleForm.svelte";
-	import UpdateRoleForm from "$components/specific/roles/UpdateRoleForm.svelte";
 	import Loader from "$components/general/Loader.svelte";
-	import PermissionsList from "$components/specific/roles/PermissionsList.svelte";
+	import PermissionsList from "$lib/components/specific/PermissionsList.svelte";
 	import { api } from "$db/utils.js";
 	import { invalidate } from "$app/navigation";
 	import { onMount } from "svelte";
+	import ModalForm from "$lib/components/general/ModalForm.svelte";
+	import { actionModalForm } from "$lib/utils/modal.js";
+	import { submitDeleteItem } from "$lib/utils/form.js";
 
 	export let data;
 	let permissions: any[] = [];
@@ -27,27 +27,17 @@
 	const updatePermissionOptionsStatesBasedOnChoice = (options: any) => {
 		let otherThingsToUpdate = {};
 
-		// daca apasa pe "read" si e "false" -> se pune si "write" pe "false"
 		if (options.permissionOption === "read" && !options.permissionOptionState) {
 			otherThingsToUpdate = {
 				["permissions.$.write"]: false
 			};
 		}
 
-		// daca apasa pe "write" si e "true" -> se verifica si "read" sa fie pe "true"
 		if (options.permissionOption === "write" && options.permissionOptionState) {
 			otherThingsToUpdate = {
 				["permissions.$.read"]: true
 			};
 		}
-
-		// daca apasa pe "write" si e "false" -> nu se intampla nimic
-		// daca apasa pe "read" si e "true" -> nu se intampla nimic
-		console.log(
-			"permissionOption, state: ",
-			options.permissionOption,
-			options.permissionOptionState
-		);
 
 		return {
 			...otherThingsToUpdate,
@@ -101,10 +91,35 @@
 			type="button"
 			class="btn btn-sm variant-filled-primary"
 			on:click={() =>
-				actionModal({
-					ref: AddRoleForm,
-					props: { permissions },
-					title: "Add New Role"
+				actionModalForm({
+					ref: ModalForm,
+					props: {
+						modalId: "addRoleModal",
+						form: {
+							id: "addRoleForm",
+							action: "create",
+							dataToAppend: [
+								{
+									name: "permissions",
+									value: JSON.stringify(permissions)
+								}
+							],
+							fields: [
+								{
+									id: "name",
+									type: "text",
+									placeholder: "Enter name...",
+									labelText: "Name"
+								}
+							],
+							messages: {
+								success: "Role added successfully",
+								error: "Role not added"
+							}
+						}
+					},
+					title: "Add New Role",
+					buttonTextSubmit: "Create"
 				})}
 		>
 			<span><IconPlus size={20} /></span>
@@ -122,12 +137,39 @@
 						<h3 class="px-2 text-primary-500 wf__list__title">{role.name}</h3>
 						<div class="wf__list__actions">
 							<button
+								type="button"
 								class="btn variant-filled-primary mr-2"
 								on:click={() =>
-									actionModal({
-										ref: UpdateRoleForm,
-										props: { role },
-										title: "Update Role"
+									actionModalForm({
+										ref: ModalForm,
+										props: {
+											modalId: "updateRoleModal",
+											form: {
+												id: "updateRoleForm",
+												action: "update",
+												dataToAppend: [
+													{
+														name: "id",
+														value: role.id
+													}
+												],
+												fields: [
+													{
+														id: "name",
+														type: "text",
+														placeholder: "Enter name...",
+														labelText: "Name",
+														value: role.name
+													}
+												],
+												messages: {
+													success: "Role updated successfully.",
+													error: "Role not updated."
+												}
+											}
+										},
+										title: "Update Role",
+										buttonTextSubmit: "Update"
 									})}
 							>
 								<span><IconPencil size={18} /></span>

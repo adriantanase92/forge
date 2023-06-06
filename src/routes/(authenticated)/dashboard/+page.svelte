@@ -1,1 +1,4 @@
-<h1>Welcome to Auth pages7</h1>
+<script lang="ts">
+</script>
+
+<h1>Welcome to Dashboard</h1>

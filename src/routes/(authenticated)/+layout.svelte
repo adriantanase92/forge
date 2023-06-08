@@ -1,8 +1,18 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { sections } from "$lib/utils/sections.js";
-	import { AppBar, AppShell, Avatar, Modal, Toast } from "@skeletonlabs/skeleton";
-	import { IconBellFilled, IconMessageCircle2Filled, IconSearch } from "@tabler/icons-svelte";
+	import {
+		AppBar,
+		AppShell,
+		Avatar,
+		Modal,
+		Toast
+	} from "@skeletonlabs/skeleton";
+	import {
+		IconBellFilled,
+		IconMessageCircle2Filled,
+		IconSearch
+	} from "@tabler/icons-svelte";
 </script>
 
 <Toast position="tr" />
@@ -70,7 +80,8 @@
 						{#each sections as section}
 							<li class="wf__sidebar__item">
 								<a
-									class:bg-surface-100-800-token={$page.url.pathname === section.url}
+									class:bg-surface-100-800-token={$page.url.pathname ===
+										section.url}
 									href={section.url}
 									class="wf__sidebar__link"
 								>
@@ -79,7 +90,8 @@
 										size={section.icon.size}
 										class="wf__sidebar__icon"
 									/>
-									<span class="flex-auto wf__sidebar__text">{section.name}</span>
+									<span class="flex-auto wf__sidebar__text">{section.name}</span
+									>
 								</a>
 							</li>
 						{/each}
@@ -100,8 +112,8 @@
 		<!-- (footer) -->
 		<svelte:fragment slot="pageFooter">
 			<div class="p-5 wf__footer">
-				&copy; {new Date().getFullYear()} <strong>WebForge Solutions</strong>, Inc. All rights
-				reserved.
+				&copy; {new Date().getFullYear()} <strong>WebForge Solutions</strong>,
+				Inc. All rights reserved.
 			</div>
 		</svelte:fragment>
 		<!-- (footer) -->

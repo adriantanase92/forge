@@ -9,6 +9,9 @@
 	export let parent: any;
 	export let props: any;
 
+	const formClasses =
+		"modal-form border border-surface-500 p-4 space-y-4 rounded-container-token";
+
 	const submitFunction: SubmitFunction = async ({ data, cancel }) => {
 		if (
 			props.form.hasOwnProperty("dataToAppend") &&
@@ -66,7 +69,12 @@
 		</header>
 		<article>{$modalStore[0].body ?? "(body missing)"}</article>
 
-		<Form id={props.form.id} action={props.form.action} {submitFunction}>
+		<Form
+			id={props.form.id}
+			action={props.form.action}
+			classes={formClasses}
+			{submitFunction}
+		>
 			{#each props.form.fields as field}
 				<Field {...field} />
 			{/each}

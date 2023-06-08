@@ -1,5 +1,21 @@
 import { api } from "$db/utils.js";
 import { fail } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types.js";
+
+export const load: PageServerLoad = async ({ fetch }) => {
+	const fetchPermissions = async () => {
+		return await api({
+			fetch,
+			url: "/api/permissions",
+			method: "GET",
+			errorMessage: "Problem retrieving permissions from the database."
+		});
+	};
+
+	return {
+		permissions: fetchPermissions()
+	};
+};
 
 export const actions = {
 	create: async ({ request, fetch }) => {

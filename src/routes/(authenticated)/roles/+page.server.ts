@@ -1,6 +1,21 @@
 import { api } from "$db/utils.js";
 import { fail } from "@sveltejs/kit";
 
+export const load = ({ fetch }) => {
+	const fetchRoles = async () => {
+		return await api({
+			fetch,
+			url: "/api/roles",
+			method: "GET",
+			errorMessage: "Problem retrieving roles from the database."
+		});
+	};
+
+	return {
+		roles: fetchRoles()
+	};
+};
+
 export const actions = {
 	create: async ({ request, fetch }) => {
 		const formData = await request.formData();

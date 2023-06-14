@@ -14,3 +14,11 @@ export const capitalizeEveryWord = (str: string) => {
 	);
 	return newArr.join(" ");
 };
+
+export const isObjectEmpty = (objectName: {}): boolean => {
+	return (
+		objectName &&
+		Object.keys(objectName).length === 0 &&
+		objectName.constructor === Object
+	);
+};

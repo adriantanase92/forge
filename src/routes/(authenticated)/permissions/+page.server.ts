@@ -1,6 +1,11 @@
 import { api } from "$db/utils.js";
 import { fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types.js";
+import type { Actions, PageServerLoad } from "./$types.js";
+import {
+	createPermissionSchema,
+	updatePermissionSchema
+} from "$lib/schemas/permission.js";
+import { superValidate } from "sveltekit-superforms/server";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const fetchPermissions = async () => {
@@ -12,42 +17,55 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		});
 	};
 
+	const form = await superValidate(createPermissionSchema);
+
 	return {
-		permissions: fetchPermissions()
+		permissions: fetchPermissions(),
+		form
 	};
 };
 
 export const actions = {
-	create: async ({ request, fetch }) => {
+	create: async ({ request, fetch }: any) => {
 		const formData = await request.formData();
-		const name = formData.get("name");
-		const id = crypto.randomUUID();
+		const form = await superValidate(formData, createPermissionSchema);
 
+		if (!form.valid)
+			return fail(400, {
+				error: true,
+				message: "Invalid form"
+			});
+
+		const id = crypto.randomUUID();
 		const permission = {
 			id,
-			name
+			...form.data
 		};
 
-		return await api({
+		await api({
 			fetch,
 			url: "/api/permissions",
 			method: "POST",
 			data: permission,
 			errorMessage: "Problem inserting into database."
 		});
+
+		return { form };
 	},
 	update: async ({ request, fetch }) => {
 		const formData = await request.formData();
-		const id = formData.get("id");
-		const name = formData.get("name");
+		const form = await superValidate(formData, updatePermissionSchema);
 
-		if (typeof name === "string" && name?.length < 2) {
+		console.log("form data on the server: ", form.data);
+
+		if (!form.valid)
 			return fail(400, {
 				error: true,
-				message: "Name must be at least 2 characters.",
-				name
+				message: "Invalid form"
 			});
-		}
+
+		const id = form.data.id;
+		const name = form.data.name;
 
 		const data = {
 			filter: { id },
@@ -56,13 +74,15 @@ export const actions = {
 			}
 		};
 
-		return await api({
+		await api({
 			fetch,
 			url: "/api/permissions",
 			method: "PATCH",
 			data: data,
 			errorMessage: "Problem updating permission."
 		});
+
+		return { form };
 	},
 	delete: async ({ request, fetch }) => {
 		const formData = await request.formData();
@@ -76,4 +96,4 @@ export const actions = {
 			errorMessage: "Problem deleting permission."
 		});
 	}
-};
+} satisfies Actions;

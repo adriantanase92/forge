@@ -44,6 +44,8 @@
 						<IconSearch size={24} color="rgb(var(--color-surface-400))" />
 					</div>
 					<input
+                        id="search"
+                        name="search"
 						class="input variant-form-material wf__search__input"
 						type="search"
 						placeholder="Search..."
@@ -225,6 +227,18 @@
 			justify-content: space-between;
 		}
 	}
+
+    .wf__form {
+        &__group {
+            height: 94px;
+            position: relative;
+        }
+
+        &__error {
+            position: absolute;
+            bottom: 0.2rem;
+        }
+    }
 
 	// ---- Shame ----
 	// this is for the toast notification to be visible over modal

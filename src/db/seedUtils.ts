@@ -1,7 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { createMany } from "./utils.js";
-import { projects, tasks } from "./collections.js";
 import { getRandomIntFromInterval } from "../lib/utils/helpers.js";
 
 /* ------- Permissions ------ */
@@ -154,7 +152,7 @@ export const usersList = [...admins, ...clients];
 /* ------- Users ------ */
 
 /* ------- Projects ------ */
-const generateProject = (id: string): any => {
+const generateProject = (id: string, clientId: string): any => {
 	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(() =>
 		faker.string.uuid()
 	);
@@ -163,14 +161,44 @@ const generateProject = (id: string): any => {
 		id,
 		name: `Project - ${faker.lorem.word()}`,
 		imageUrl: faker.image.urlLoremFlickr({ category: "abstract" }),
-		managementType: faker.helpers.arrayElement(["internal", "external"]),
+		managementToolType: faker.helpers.arrayElement(["internal", "external"]),
 		invoices: {},
+		client: clientId,
+		status: faker.helpers.arrayElement(["active", "pending", "inactive"]),
+		labels: faker.helpers.arrayElements(
+			[
+				"planning",
+				"designing",
+				"researching",
+				"on-discussions",
+				"on-negociating",
+				"waiting-for-client"
+			],
+			{ min: 0, max: 3 }
+		),
 		tasks: [...tasksIds]
 	};
 };
 
-const projectsIds = [...clients.flatMap((client) => client.projects)];
-export const projectsList = [...projectsIds.map((id) => generateProject(id))];
+const projectsPerClient = clients.map((client) => ({
+	clientId: client.id,
+	projects: client.projects
+}));
+const formatedProjectsPerClient = [
+	...projectsPerClient.flatMap((p) => {
+		const projects: any[] = [];
+		p.projects.forEach((id: string) =>
+			projects.push({ id, clientId: p.clientId })
+		);
+		return projects;
+	})
+];
+export const projectsList = [
+	...formatedProjectsPerClient.map((project) =>
+		generateProject(project.id, project.clientId)
+	)
+];
+
 /* ------- Projects ------ */
 
 /* ------- Tasks ------ */

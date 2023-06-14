@@ -1,5 +1,10 @@
 import { fail } from "@sveltejs/kit";
-import type { Filter, FindOneAndUpdateOptions, UpdateFilter } from "mongodb";
+import type {
+	Collection,
+	Filter,
+	FindOneAndUpdateOptions,
+	UpdateFilter
+} from "mongodb";
 
 export const api = async (options: {
 	fetch: any;
@@ -19,7 +24,10 @@ export const api = async (options: {
 		const response = await options.fetch(options.url, {
 			method: options.method,
 			headers: options.headers ? options.headers : defaultHeaders,
-			body: options.data && options.method !== "GET" ? JSON.stringify(options.data) : null
+			body:
+				options.data && options.method !== "GET"
+					? JSON.stringify(options.data)
+					: null
 		});
 
 		return await response.json();
@@ -33,12 +41,30 @@ export const api = async (options: {
 	}
 };
 
-export const getAll = async (collection: any, url: any, query?: any, projection?: any) => {
+export const getAll = async (collection: Collection, url: any) => {
 	try {
-		const limit = Number(url.searchParams.get("limit") ?? 10);
-		const skip = Number(url.searchParams.get("skip") ?? 0);
+		// const urlEntries = url.searchParams.entries();
+		// console.log("values: ", urlEntries);
 
-		const data = await collection.find().limit(limit).skip(skip).toArray();
+		const limit = Number(url.searchParams.get("limit") ?? 10);
+		const skip = Number(url.searchParams.get("page") ?? 0) * limit;
+		const sort = JSON.parse(decodeURI(url.searchParams.get("sort") ?? {}));
+		const project = JSON.parse(
+			decodeURI(url.searchParams.get("project") ?? {})
+		);
+		const filter = JSON.parse(decodeURI(url.searchParams.get("filter") ?? {}));
+
+		// const filter =
+		console.log("url: ", url);
+
+		const data = await collection
+			.find()
+			.filter(filter)
+			.project(project)
+			.limit(limit)
+			.skip(skip)
+			.sort(sort)
+			.toArray();
 
 		return {
 			success: true,
@@ -95,7 +121,10 @@ export const updateOne = async (
 	}
 ) => {
 	try {
-		collection.findOneAndUpdate({ ...data.filter }, { $set: { ...data.update } });
+		collection.findOneAndUpdate(
+			{ ...data.filter },
+			{ $set: { ...data.update } }
+		);
 
 		return {
 			success: true

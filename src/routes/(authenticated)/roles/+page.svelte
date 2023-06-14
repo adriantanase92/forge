@@ -6,7 +6,7 @@
 	import { api } from "$db/utils.js";
 	import { invalidate } from "$app/navigation";
 	import { onMount } from "svelte";
-	import ModalForm from "$lib/components/general/ModalForm.svelte";
+	import ModalForm from "$lib/components/general/ModalForm/ModalForm.svelte";
 	import { actionModalForm } from "$lib/utils/modal.js";
 	import { submitDeleteItem } from "$lib/utils/form.js";
 

@@ -2,13 +2,18 @@
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
 	import Loader from "$lib/components/general/Loader.svelte";
-	import ModalForm from "$lib/components/general/ModalForm.svelte";
+	import ModalForm from "$lib/components/general/ModalForm/ModalForm.svelte";
 	import { actionModalForm } from "$lib/utils/modal.js";
 	import { submitDeleteItem } from "$lib/utils/form.js";
+	import type { PageData } from "./$types.js";
+	import {
+		createPermissionSchema,
+		updatePermissionSchema
+	} from "$lib/schemas/permission.js";
 
-	export let data;
+	export let data: PageData;
 
-	$: ({ permissions } = data);
+	$: ({ permissions, form } = data);
 </script>
 
 <div>
@@ -23,14 +28,17 @@
 					props: {
 						modalId: "addPermissionModal",
 						form: {
+							data: form,
 							id: "addPermissionForm",
 							action: "create",
+							schema: createPermissionSchema,
 							fields: [
 								{
 									id: "name",
 									type: "text",
 									placeholder: "Enter name...",
-									labelText: "Name"
+									labelText: "Name",
+									name: "name"
 								}
 							],
 							messages: {
@@ -68,8 +76,10 @@
 										props: {
 											modalId: "updatePermissionModal",
 											form: {
+												data: form,
 												id: "updatePermissionForm",
 												action: "update",
+												schema: createPermissionSchema,
 												dataToAppend: [
 													{
 														name: "id",
@@ -82,7 +92,8 @@
 														type: "text",
 														placeholder: "Enter name...",
 														labelText: "Name",
-														value: permission.name
+														name: "name",
+														valueData: permission.name
 													}
 												],
 												messages: {

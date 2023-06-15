@@ -1,8 +1,8 @@
-import { roles } from "$db/collections.js";
+import { Role } from "$db/schemas/Role.js";
 import { getOne } from "$db/utils.js";
 
 export const GET = async ({ params }) => {
-	const data = await getOne(roles, params.id);
+	const data = await getOne(Role, params.id);
 
 	return new Response(JSON.stringify(data));
 };

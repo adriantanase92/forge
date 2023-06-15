@@ -1,41 +1,42 @@
 import { faker } from "@faker-js/faker";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { getRandomIntFromInterval } from "../lib/utils/helpers.js";
+import { ObjectId } from "mongodb";
 
 /* ------- Permissions ------ */
 export const permissionsList = [
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "permissions",
 		read: false,
 		write: false
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "roles",
 		read: false,
 		write: false
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "users",
 		read: false,
 		write: false
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "projects",
 		read: false,
 		write: false
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "tasks",
 		read: false,
 		write: false
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		name: "invoices",
 		read: false,
 		write: false
@@ -46,12 +47,12 @@ export const permissionsList = [
 /* ------- Roles ------ */
 export const rolesList = [
 	{
-		id: "4136cd0b-d90b-4af7-b485-123456789001",
+		id: new ObjectId("64770a6aab3dfa88bf4966eb"),
 		name: "admin",
 		permissions: [
 			...permissionsList.map((permission) => {
 				return {
-					id: faker.string.uuid(),
+					id: new ObjectId(),
 					name: permission.name,
 					read: true,
 					write: true
@@ -60,7 +61,7 @@ export const rolesList = [
 		]
 	},
 	{
-		id: "4136cd0b-d90b-4af7-b485-123456789002",
+		id: new ObjectId("64770a6aab3dfa88bf4966ea"),
 		name: "client",
 		permissions: [
 			...permissionsList.map((permission) => {
@@ -72,7 +73,7 @@ export const rolesList = [
 						: false;
 
 				return {
-					id: faker.string.uuid(),
+					id: new ObjectId(),
 					name: permission.name,
 					read: access,
 					write: access
@@ -89,23 +90,21 @@ const hash = hashSync("Admin@1", salt);
 
 const admins = [
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		avatar: faker.image.avatar(),
 		firstName: "Adrian",
-		middleName: "",
 		lastName: "Tanase",
-		role: "4136cd0b-d90b-4af7-b485-123456789001",
+		role: new ObjectId("64770a6aab3dfa88bf4966eb"),
 		email: "tanase.adrian92@gmail.com",
 		password: hash,
 		phone: faker.phone.number("+40 7## ### ###"),
 		birthday: faker.date.birthdate({ min: 18, max: 65 })
 	},
 	{
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		firstName: "Andreea",
-		middleName: "",
 		lastName: "Dragu",
-		role: "4136cd0b-d90b-4af7-b485-123456789001",
+		role: new ObjectId("64770a6aab3dfa88bf4966eb"),
 		email: "a.dragu93@gmail.com",
 		password: hash,
 		phone: faker.phone.number("+40 7## ### ###"),
@@ -115,17 +114,15 @@ const admins = [
 
 const generateRandomUser = (role: "client" | "intermediary"): any => {
 	const firstName = faker.person.firstName();
-	const middleName = faker.person.middleName();
 	const lastName = faker.person.lastName();
 	const roleId = rolesList.filter((r) => r.name === role)[0].id;
 
 	const user = {
-		id: faker.string.uuid(),
+		id: new ObjectId(),
 		avatar: faker.image.avatar(),
 		birthday: faker.date.birthdate({ min: 18, max: 65 }),
 		email: faker.internet.email({ firstName, lastName }),
 		firstName,
-		middleName,
 		lastName,
 		role: roleId,
 		password: hash,
@@ -133,8 +130,8 @@ const generateRandomUser = (role: "client" | "intermediary"): any => {
 	};
 
 	if (role === "client") {
-		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(() =>
-			faker.string.uuid()
+		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(
+			() => new ObjectId()
 		);
 
 		return {
@@ -153,8 +150,8 @@ export const usersList = [...admins, ...clients];
 
 /* ------- Projects ------ */
 const generateProject = (id: string, clientId: string): any => {
-	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(() =>
-		faker.string.uuid()
+	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(
+		() => new ObjectId()
 	);
 
 	return {
@@ -162,7 +159,7 @@ const generateProject = (id: string, clientId: string): any => {
 		name: `Project - ${faker.lorem.word()}`,
 		imageUrl: faker.image.urlLoremFlickr({ category: "abstract" }),
 		managementToolType: faker.helpers.arrayElement(["internal", "external"]),
-		invoices: {},
+		// invoices: null,
 		client: clientId,
 		status: faker.helpers.arrayElement(["active", "pending", "inactive"]),
 		labels: faker.helpers.arrayElements(
@@ -207,7 +204,11 @@ const generateTasksForProject = (id: string, projectId: string): any => ({
 	project: projectId,
 	title: faker.word.words(8),
 	priority: faker.helpers.arrayElement(["high", "medium", "low"]),
-	status: faker.helpers.arrayElement(["to-do", "doing", "done", "backlog"])
+	column: faker.helpers.arrayElement(["to-do", "doing", "done", "backlog"]),
+	labels: faker.helpers.arrayElements(["development", "design", "testing"], {
+		min: 0,
+		max: 3
+	})
 });
 
 const tasksPerProject = projectsList.map((project) => ({

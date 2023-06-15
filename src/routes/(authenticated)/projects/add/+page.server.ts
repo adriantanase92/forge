@@ -1,6 +1,6 @@
 import { message, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types.js";
-import { crudProjectSchema } from "$lib/schemas/project.js";
+import { crudProjectSchema } from "$lib/form-schemas/project.js";
 import { api } from "$db/utils.js";
 
 export const load = (async ({ fetch }) => {

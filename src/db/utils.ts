@@ -1,10 +1,6 @@
+import { decodeAndParse, isObjectEmpty } from "$lib/utils/helpers.js";
 import { fail } from "@sveltejs/kit";
-import type {
-	Collection,
-	Filter,
-	FindOneAndUpdateOptions,
-	UpdateFilter
-} from "mongodb";
+import type { FilterQuery, Model, QueryOptions, UpdateQuery } from "mongoose";
 
 export const api = async (options: {
 	fetch: any;
@@ -41,107 +37,115 @@ export const api = async (options: {
 	}
 };
 
-export const getAll = async (collection: Collection, url: any) => {
+export const getAll = async <T>(model: Model<T>, url: any) => {
 	try {
-		// const urlEntries = url.searchParams.entries();
-		// console.log("values: ", urlEntries);
-
+		const search = String(url.searchParams.get("search") ?? "");
 		const limit = Number(url.searchParams.get("limit") ?? 10);
-		const skip = Number(url.searchParams.get("page") ?? 0) * limit;
-		const sort = JSON.parse(decodeURI(url.searchParams.get("sort") ?? {}));
-		const project = JSON.parse(
-			decodeURI(url.searchParams.get("project") ?? {})
-		);
-		const filter = JSON.parse(decodeURI(url.searchParams.get("filter") ?? {}));
+		const page = Number(url.searchParams.get("page") ?? 0);
+		const skip = page > 0 ? (page - 1) * limit : page * limit;
+		const sort = decodeAndParse(url.searchParams.get("sort") ?? {});
+		const filter = decodeAndParse(url.searchParams.get("filter") ?? {});
+		const projection = decodeAndParse(url.searchParams.get("projection") ?? {});
+		const populate = decodeAndParse(url.searchParams.get("populate") ?? {});
 
-		// const filter =
-		console.log("url: ", url);
+		console.log("populate: ", populate);
 
-		const data = await collection
-			.find()
-			.filter(filter)
-			.project(project)
-			.limit(limit)
+		const query = model
+			.find({ ...filter }, { ...projection })
+			.populate(!isObjectEmpty(populate) ? { ...populate } : "");
+		const total = await model
+			.find({ ...filter }, { ...projection })
+			// .populate(!isObjectEmpty(populate) ? { ...populate } : "")
+			.countDocuments()
+			.exec();
+
+		const data = await query
+			.sort({ ...sort })
 			.skip(skip)
-			.sort(sort)
-			.toArray();
+			.limit(limit)
+			.lean();
+
+		return {
+			success: true,
+			data: {
+				data,
+				page,
+				lastPage: Math.ceil(total / limit)
+			}
+		};
+	} catch (error: any) {
+		console.error(error.message);
+	}
+};
+
+export const getOne = async <T>(model: Model<T>, id: string) => {
+	try {
+		const data = await model.findOne({ id });
 
 		return {
 			success: true,
 			data
 		};
 	} catch (error: any) {
-		console.error(error);
+		console.error(error.message);
 	}
 };
 
-export const getOne = async (collection: any, id: string) => {
+export const createOne = async <T>(model: Model<T>, item: any) => {
 	try {
-		const data = await collection.findOne({ id });
-
-		return {
-			success: true,
-			data
-		};
-	} catch (error: any) {
-		console.error(error);
-	}
-};
-
-export const createOne = async (collection: any, item: any) => {
-	try {
-		collection.insertOne(item);
+		await model.create(item);
 
 		return {
 			success: true
 		};
 	} catch (error: any) {
-		console.error(error);
+		console.error(error.message);
 	}
 };
 
-export const createMany = async (collection: any, items: any[]) => {
+export const createMany = async <T>(model: Model<T>, items: any[]) => {
 	try {
-		collection.insertMany(items);
+		model.insertMany(items);
 
 		return {
 			success: true
 		};
 	} catch (error: any) {
-		console.error(error);
+		console.error(error.message);
 	}
 };
 
-export const updateOne = async (
-	collection: any,
+export const updateOne = async <T>(
+	model: Model<T>,
 	data: {
-		filter: Filter<any>;
-		update: UpdateFilter<any>;
-		options?: FindOneAndUpdateOptions;
+		filter: FilterQuery<T>;
+		update: UpdateQuery<T>;
+		options?: QueryOptions<any> | null;
 	}
 ) => {
 	try {
-		collection.findOneAndUpdate(
+		model.findOneAndUpdate(
 			{ ...data.filter },
-			{ $set: { ...data.update } }
+			{ $set: { ...data.update } },
+			{ new: true }
 		);
 
 		return {
 			success: true
 		};
-	} catch (error) {
-		console.error(error);
+	} catch (error: any) {
+		console.error(error.message);
 	}
 };
 
-export const deleteOne = async (collection: any, id: string) => {
+export const deleteOne = async <T>(model: Model<T>, id: string) => {
 	try {
-		collection.findOneAndDelete({ id });
+		model.findOneAndDelete({ id });
 
 		return {
 			success: true
 		};
-	} catch (e: any) {
-		console.error(e.message);
+	} catch (error: any) {
+		console.error(error.message);
 	}
 };

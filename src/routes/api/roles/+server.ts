@@ -1,4 +1,4 @@
-import { roles } from "$db/collections.js";
+import { Role } from "$db/schemas/Role.js";
 import { createOne, deleteOne, getAll, getOne, updateOne } from "$db/utils.js";
 
 export const GET = async ({ request, url }) => {
@@ -10,14 +10,7 @@ export const GET = async ({ request, url }) => {
 	// 	});
 	// }
 
-	let isOk: any;
-
-	if (request.body !== null) {
-		const body = await request.json();
-		isOk = await getOne(roles, body.id);
-	} else {
-		isOk = await getAll(roles, url);
-	}
+	const isOk: any = await getAll(Role, url);
 
 	if (isOk.success)
 		return new Response(JSON.stringify(isOk.data), {
@@ -32,7 +25,7 @@ export const POST = async ({ request }) => {
 		name: body.name,
 		permissions: body.permissions
 	};
-	const isOk: any = await createOne(roles, newRole);
+	const isOk: any = await createOne(Role, newRole);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -42,7 +35,7 @@ export const POST = async ({ request }) => {
 
 export const PATCH = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await updateOne(roles, body);
+	const isOk: any = await updateOne(Role, body);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -52,7 +45,7 @@ export const PATCH = async ({ request }) => {
 
 export const DELETE = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await deleteOne(roles, body.id);
+	const isOk: any = await deleteOne(Role, body.id);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {

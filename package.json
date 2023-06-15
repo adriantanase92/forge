@@ -78,6 +78,7 @@
 		"@tabler/icons-svelte": "2.20.0",
 		"bcrypt-ts": "3.0.1",
 		"mongodb": "5.5.0",
+		"mongoose": "^7.2.4",
 		"ts-node": "10.9.1"
 	}
 }

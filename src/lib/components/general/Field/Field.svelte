@@ -133,15 +133,15 @@
 
 	{#if $errors}
 		<div class="flex flex-col wf__form__error">
-            {#if $errors.length > 0}
-                {#each $errors as error}
-                    <span class="flex text-red-500 text-sm">{error}</span>
-                {/each}
-            {:else if $errors.hasOwnProperty(errors) && $errors.errors > 0}
-                {#each $errors.errors as error}
-                    <span class="flex text-red-500 text-sm">{error}</span>
-                {/each}
-            {/if}
+			{#if $errors.length > 0}
+				{#each $errors as error}
+					<span class="flex text-red-500 text-sm">{error}</span>
+				{/each}
+			{:else if $errors.hasOwnProperty("errors") && $errors.errors > 0}
+				{#each $errors.errors as error}
+					<span class="flex text-red-500 text-sm">{error}</span>
+				{/each}
+			{/if}
 		</div>
 	{/if}
 </div>

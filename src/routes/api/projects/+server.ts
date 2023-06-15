@@ -1,6 +1,6 @@
-import { projects } from "$db/collections.js";
+import { Project } from "$db/schemas/Project.js";
 import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
-import { projectSchema } from "$lib/schemas/project.js";
+import { projectSchema } from "$lib/form-schemas/project.js";
 import { superValidate } from "sveltekit-superforms/server";
 
 export const GET = async ({ url }) => {
@@ -12,7 +12,7 @@ export const GET = async ({ url }) => {
 	// 	});
 	// }
 
-	const isOk: any = await getAll(projects, url);
+	const isOk: any = await getAll(Project, url);
 
 	if (isOk.success)
 		return new Response(JSON.stringify(isOk.data), {
@@ -30,7 +30,7 @@ export const POST = async ({ request }) => {
 		});
 	}
 
-	const isOk: any = await createOne(projects, { ...body });
+	const isOk: any = await createOne(Project, { ...body });
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -40,7 +40,7 @@ export const POST = async ({ request }) => {
 
 export const PATCH = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await updateOne(projects, body);
+	const isOk: any = await updateOne(Project, body);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -50,7 +50,7 @@ export const PATCH = async ({ request }) => {
 
 export const DELETE = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await deleteOne(projects, body.id);
+	const isOk: any = await deleteOne(Project, body.id);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {

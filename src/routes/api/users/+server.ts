@@ -1,4 +1,4 @@
-import { users } from "$db/collections.js";
+import { User } from "$db/schemas/User.js";
 import { getAll } from "$db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
@@ -11,7 +11,7 @@ export const GET = async ({ url }: RequestEvent) => {
 	// 	});
 	// }
 
-	const isOk: any = await getAll(users, url);
+	const isOk: any = await getAll(User, url);
 
 	if (isOk.success)
 		return new Response(JSON.stringify(isOk.data), {
@@ -21,13 +21,6 @@ export const GET = async ({ url }: RequestEvent) => {
 
 // export const POST = async ({ request }) => {
 // 	const body = await request.json();
-// 	// ### If ever need to check if an Authorization is set in the headers of the request
-// 	// const authHeader = request.headers.get("Authorization");
-// 	// if (!authHeader) {
-// 	// 	return new Response(JSON.stringify({ message: "Invalid credentials" }), {
-// 	// 		status: 401
-// 	// 	});
-// 	// }
 
 // 	console.log(body);
 

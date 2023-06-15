@@ -4,27 +4,27 @@
 	import { superForm } from "sveltekit-superforms/client";
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
-	import { crudProjectSchema } from "$lib/schemas/project.js";
+	import { crudProjectSchema } from "$lib/form-schemas/project.js";
 	import { addFormFields } from "./form-fields.js";
 	import Spinner from "$lib/components/general/Spinner.svelte";
 	import { page } from "$app/stores";
-    import { toastStore } from "@skeletonlabs/skeleton";
-    import { goto } from '$app/navigation';
+	import { toastStore } from "@skeletonlabs/skeleton";
+	import { goto } from "$app/navigation";
 
 	export let data: PageData;
 
 	const form = superForm(data.form, {
 		validators: crudProjectSchema,
 		validationMethod: "auto",
-        onUpdated: ({form}) => {
-            if(form.valid) {
-                toastStore.trigger({
-                    message: "Project created successfully.",
-                    background: "variant-filled-success"
-                });
-                goto('/projects');
-            }
-        }
+		onUpdated: ({ form }) => {
+			if (form.valid) {
+				toastStore.trigger({
+					message: "Project created successfully.",
+					background: "variant-filled-success"
+				});
+				goto("/projects");
+			}
+		}
 	});
 	const { form: formData, message, enhance, delayed } = form;
 

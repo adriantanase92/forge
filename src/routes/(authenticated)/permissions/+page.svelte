@@ -9,11 +9,13 @@
 	import {
 		createPermissionSchema,
 		updatePermissionSchema
-	} from "$lib/schemas/permission.js";
+	} from "$lib/form-schemas/permission.js";
 
 	export let data: PageData;
 
 	$: ({ permissions, form } = data);
+
+	$: console.log("permissions: ", permissions);
 </script>
 
 <div>

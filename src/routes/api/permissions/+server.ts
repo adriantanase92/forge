@@ -1,4 +1,4 @@
-import { permissions } from "$db/collections.js";
+import { Permission } from "$db/schemas/Permission.js";
 import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
 
 export const GET = async ({ url }) => {
@@ -10,7 +10,7 @@ export const GET = async ({ url }) => {
 	// 	});
 	// }
 
-	const isOk: any = await getAll(permissions, url);
+	const isOk: any = await getAll(Permission, url);
 
 	if (isOk.success)
 		return new Response(JSON.stringify(isOk.data), {
@@ -26,7 +26,7 @@ export const POST = async ({ request }) => {
 		read: false,
 		write: false
 	};
-	const isOk: any = await createOne(permissions, newPermission);
+	const isOk: any = await createOne(Permission, newPermission);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -36,7 +36,7 @@ export const POST = async ({ request }) => {
 
 export const PATCH = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await updateOne(permissions, body);
+	const isOk: any = await updateOne(Permission, body);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {
@@ -46,7 +46,7 @@ export const PATCH = async ({ request }) => {
 
 export const DELETE = async ({ request }) => {
 	const body = await request.json();
-	const isOk: any = await deleteOne(permissions, body.id);
+	const isOk: any = await deleteOne(Permission, body.id);
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {

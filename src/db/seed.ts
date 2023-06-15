@@ -1,18 +1,29 @@
-import { permissions, projects, roles, tasks, users } from "./collections.js";
-import { permissionsList, projectsList, rolesList, tasksList, usersList } from "./seedUtils.js";
+import type { Model } from "mongoose";
+import {
+	permissionsList,
+	projectsList,
+	rolesList,
+	tasksList,
+	usersList
+} from "./seedUtils.js";
 import { createMany } from "./utils.js";
+import { Permission } from "./schemas/Permission.js";
+import { Role } from "./schemas/Role.js";
+import { User } from "./schemas/User.js";
+import { Project } from "./schemas/Project.js";
+import { Task } from "./schemas/Task.js";
 
-async function seedCollection(collection: any, items: any) {
+async function seedCollection<T>(model: Model<T>, items: any) {
 	try {
 		// The drop() command destroys all data from a collection.
 		// This checks if there is a collection alread and drops it
-		if ((await collection.countDocuments()) > 0) {
-			await collection.drop();
+		if ((await model.countDocuments().exec()) > 0) {
+			await model.deleteMany({});
 		}
 
 		// Seeding
-		console.log(`Start seeding collection ${collection}`);
-		await createMany(collection, items);
+		console.log(`Start seeding collection ${model.modelName}s`);
+		await createMany(model, items);
 		console.log("Collection seeded!");
 
 		return {
@@ -25,7 +36,7 @@ async function seedCollection(collection: any, items: any) {
 
 export async function seedPermissions() {
 	try {
-		await seedCollection(permissions, permissionsList);
+		await seedCollection(Permission, permissionsList);
 	} catch (err: any) {
 		console.log(err.stack);
 	}
@@ -33,7 +44,7 @@ export async function seedPermissions() {
 
 export async function seedRoles() {
 	try {
-		await seedCollection(roles, rolesList);
+		await seedCollection(Role, rolesList);
 	} catch (err: any) {
 		console.log(err.stack);
 	}
@@ -41,7 +52,7 @@ export async function seedRoles() {
 
 export async function seedUsers() {
 	try {
-		await seedCollection(users, usersList);
+		await seedCollection(User, usersList);
 	} catch (err: any) {
 		console.log(err.stack);
 	}
@@ -49,7 +60,7 @@ export async function seedUsers() {
 
 export async function seedProjects() {
 	try {
-		await seedCollection(projects, projectsList);
+		await seedCollection(Project, projectsList);
 	} catch (err: any) {
 		console.log(err.stack);
 	}
@@ -57,7 +68,7 @@ export async function seedProjects() {
 
 export async function seedTasks() {
 	try {
-		await seedCollection(tasks, tasksList);
+		await seedCollection(Task, tasksList);
 	} catch (err: any) {
 		console.log(err.stack);
 	}

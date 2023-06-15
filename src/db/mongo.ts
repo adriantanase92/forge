@@ -1,12 +1,11 @@
 import { env } from "$env/dynamic/private";
-import { MongoClient } from "mongodb";
+import mongoose, { Mongoose } from "mongoose";
 
-const client = new MongoClient(env.MONGODB_URI);
+const db = mongoose.connect(env.MONGODB_URI);
 
-export async function start_mongo(): Promise<MongoClient> {
+export async function start_mongo(): Promise<Mongoose> {
 	console.log("Starting mongo...");
-	console.log("env mongodb_uri: ", env.MONGODB_URI);
-	return await client.connect();
+	return await db;
 }
 
-export default client.db(env.MONGODB_NAME);
+export default db;

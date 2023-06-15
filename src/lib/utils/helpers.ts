@@ -22,3 +22,6 @@ export const isObjectEmpty = (objectName: {}): boolean => {
 		objectName.constructor === Object
 	);
 };
+
+export const decodeAndParse = (value: string | object): any =>
+	typeof value === "object" ? {} : JSON.parse(decodeURI(value));

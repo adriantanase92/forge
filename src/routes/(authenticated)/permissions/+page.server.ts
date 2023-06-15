@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from "./$types.js";
 import {
 	createPermissionSchema,
 	updatePermissionSchema
-} from "$lib/schemas/permission.js";
+} from "$lib/form-schemas/permission.js";
 import { superValidate } from "sveltekit-superforms/server";
 
 export const load: PageServerLoad = async ({ fetch }) => {

@@ -5,7 +5,7 @@
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
 	import { crudProjectSchema } from "$lib/form-schemas/project.js";
-	import { addFormFields } from "./form-fields.js";
+	import { addFormFields } from "../form-fields.js";
 	import Spinner from "$lib/components/general/Spinner.svelte";
 	import { page } from "$app/stores";
 	import { toastStore } from "@skeletonlabs/skeleton";

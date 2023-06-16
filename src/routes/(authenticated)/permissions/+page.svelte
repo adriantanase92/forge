@@ -6,16 +6,13 @@
 	import { actionModalForm } from "$lib/utils/modal.js";
 	import { submitDeleteItem } from "$lib/utils/form.js";
 	import type { PageData } from "./$types.js";
-	import {
-		createPermissionSchema,
-		updatePermissionSchema
-	} from "$lib/form-schemas/permission.js";
+	import { crudPermissionSchema } from "$lib/form-schemas/permission.js";
 
 	export let data: PageData;
 
 	$: ({ permissions, form } = data);
 
-	// $: console.log("permissions: ", permissions);
+	$: console.log("permissions: ", permissions);
 </script>
 
 <div>
@@ -33,7 +30,7 @@
 							data: form,
 							id: "addPermissionForm",
 							action: "create",
-							schema: createPermissionSchema,
+							schema: crudPermissionSchema,
 							fields: [
 								{
 									id: "name",
@@ -81,7 +78,7 @@
 												data: form,
 												id: "updatePermissionForm",
 												action: "update",
-												schema: createPermissionSchema,
+												schema: crudPermissionSchema,
 												dataToAppend: [
 													{
 														name: "id",

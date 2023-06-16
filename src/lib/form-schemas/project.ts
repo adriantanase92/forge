@@ -9,7 +9,7 @@ export const projectSchema = z.object({
 		.max(30, { message: "Must not have more than 30 characters" }),
 	imageUrl: z.string().trim().url("Must be a valid URL"),
 	managementToolType: z.enum(["external", "internal"]).default("external"),
-	client: z.string().trim().uuid({ message: "Invalid UUID" }),
+	client: z.string().trim(),
 	status: z.enum(["active", "pending", "inactive"]).default("active"),
 	labels: z.string().array().max(3)
 });

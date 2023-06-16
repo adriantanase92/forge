@@ -1,10 +1,7 @@
 import { api } from "$db/utils.js";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
-import {
-	createPermissionSchema,
-	updatePermissionSchema
-} from "$lib/form-schemas/permission.js";
+import { crudPermissionSchema } from "$lib/form-schemas/permission.js";
 import { superValidate } from "sveltekit-superforms/server";
 
 export const load: PageServerLoad = async ({ fetch }) => {
@@ -28,7 +25,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		});
 	};
 
-	const form = await superValidate(createPermissionSchema);
+	const form = await superValidate(crudPermissionSchema);
 
 	return {
 		permissions: fetchPermissions(),
@@ -39,7 +36,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 export const actions = {
 	create: async ({ request, fetch }: any) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, createPermissionSchema);
+		const form = await superValidate(formData, crudPermissionSchema);
 
 		if (!form.valid)
 			return fail(400, {
@@ -65,7 +62,7 @@ export const actions = {
 	},
 	update: async ({ request, fetch }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, updatePermissionSchema);
+		const form = await superValidate(formData, crudPermissionSchema);
 
 		console.log("form data on the server: ", form.data);
 

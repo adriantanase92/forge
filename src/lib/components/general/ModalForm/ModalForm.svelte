@@ -83,9 +83,8 @@
 			action="?/{props.form.action}"
 			use:enhance
 		>
-			{#each props.form.fields as fieldProps}
-				{@const { name, valueData, ...rest } = fieldProps}
-				<Field {form} field={name} {name} {valueData} {...rest} />
+			{#each props.form.fields as field}
+				<Field {form} field={field.id} {...field} />
 			{/each}
 		</form>
 

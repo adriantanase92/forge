@@ -28,6 +28,12 @@
 	});
 	const { form: formData, message, enhance, delayed } = form;
 
+	$: ({ clients } = data);
+	// $: console.log("clients: ", clients);
+	$: clientsSelectedOptions = clients.items.map((client: any) => ({
+		value: client._id,
+		text: `${client.firstName} ${client.lastName}`
+	}));
 	// $: console.log("form: ", form);
 </script>
 
@@ -51,7 +57,7 @@
 
 <form id="addForm" class="wf__form" method="POST" use:enhance>
 	<div class="grid gap-2 grid-cols-3 mb-6">
-		{#each addFormFields([]) as field}
+		{#each addFormFields(clientsSelectedOptions) as field}
 			<Field {form} field={field.id} {...field} />
 		{/each}
 	</div>

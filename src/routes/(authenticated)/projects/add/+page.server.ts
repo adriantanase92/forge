@@ -3,19 +3,37 @@ import type { Actions, PageServerLoad } from "./$types.js";
 import { crudProjectSchema } from "$lib/form-schemas/project.js";
 import { api } from "$db/utils.js";
 
-export const load = (async ({ fetch }) => {
+export const load: PageServerLoad = (async ({ fetch }) => {
 	const fetchClients = async () => {
-		const projection = encodeURI(
-			JSON.stringify({
-				id: 1,
-				firstName: 1,
-				lastName: 1,
-				_id: 0
-			})
+		const aggregate = encodeURI(
+			JSON.stringify([
+				{
+					$lookup: {
+						from: "roles",
+						localField: "role",
+						foreignField: "_id",
+						as: "role"
+					}
+				},
+				{ $unwind: "$role" },
+				{ $match: { "role.name": "client" } },
+				{
+					$project: {
+						birthday: 0,
+						password: 0,
+						avatar: 0,
+						projects: 0,
+						phone: 0,
+						email: 0,
+						createdAt: 0,
+						updatedAt: 0
+					}
+				}
+			])
 		);
 		return await api({
 			fetch,
-			url: `/api/users?project=${projection}`,
+			url: `/api/users?aggregate=${aggregate}`,
 			method: "GET",
 			errorMessage: "Problem retrieving clients from the database."
 		});

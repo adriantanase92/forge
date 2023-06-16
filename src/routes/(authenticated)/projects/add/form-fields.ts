@@ -34,6 +34,8 @@ export const addFormFields = (clients: any) => {
 		},
 		{
 			label: "Client",
+			kind: "select",
+			selectOptions: [...clients],
 			id: "client",
 			classes: "variant-form-material"
 		},

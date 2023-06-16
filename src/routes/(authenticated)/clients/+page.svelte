@@ -2,7 +2,7 @@
 	export let data;
 
 	$: ({ clients } = data);
-	$: console.log("data: ", clients);
+	$: console.log("clients: ", clients);
 </script>
 
 <div>

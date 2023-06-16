@@ -45,7 +45,9 @@ export const getAll = async <T>(model: Model<T>, url: any) => {
 		const sort = decodeAndParse(url.searchParams.get("sort")) ?? {
 			createdAt: -1
 		};
-		const aggregate = decodeAndParse(url.searchParams.get("aggregate") ?? {});
+		const aggregate = decodeAndParse(url.searchParams.get("aggregate")) ?? [
+			{ $match: { _id: { $exists: true } } }
+		];
 
 		const data = await model.aggregate([
 			...aggregate,
@@ -72,7 +74,7 @@ export const getAll = async <T>(model: Model<T>, url: any) => {
 		const dataWithPagination = {
 			items: data[0].items,
 			pagination: {
-				total: data[0].total,
+				total: data[0].total[0].total,
 				page
 			}
 		};

@@ -1,7 +1,8 @@
 import { Role } from "$db/schemas/Role.js";
-import { createOne, deleteOne, getAll, getOne, updateOne } from "$db/utils.js";
+import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export const GET = async ({ request, url }) => {
+export const GET = async ({ request, url }: RequestEvent) => {
 	// ### If ever need to check if an Authorization is set in the headers of the request
 	// const authHeader = request.headers.get("Authorization");
 	// if (!authHeader) {
@@ -18,7 +19,7 @@ export const GET = async ({ request, url }) => {
 		});
 };
 
-export const POST = async ({ request }) => {
+export const POST = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const newRole = {
 		id: body.id,
@@ -33,7 +34,7 @@ export const POST = async ({ request }) => {
 		});
 };
 
-export const PATCH = async ({ request }) => {
+export const PATCH = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const isOk: any = await updateOne(Role, body);
 
@@ -43,7 +44,7 @@ export const PATCH = async ({ request }) => {
 		});
 };
 
-export const DELETE = async ({ request }) => {
+export const DELETE = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const isOk: any = await deleteOne(Role, body.id);
 

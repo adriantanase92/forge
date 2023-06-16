@@ -1,7 +1,8 @@
 import { api } from "$db/utils.js";
 import { fail } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types.js";
 
-export const load = ({ fetch }) => {
+export const load: PageServerLoad = ({ fetch }) => {
 	const fetchRoles = async () => {
 		return await api({
 			fetch,

@@ -15,6 +15,8 @@
 
 	$: ({ roles } = data);
 
+	$: console.log("dat: ", data);
+
 	onMount(async () => {
 		permissions = await api({
 			fetch,

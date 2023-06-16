@@ -5,6 +5,7 @@
 	export let data;
 
 	$: ({ projects } = data);
+	$: console.log("data ", data);
 </script>
 
 <div>

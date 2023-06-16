@@ -1,9 +1,10 @@
 import { Project } from "$db/schemas/Project.js";
 import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
 import { projectSchema } from "$lib/form-schemas/project.js";
+import type { RequestEvent } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 
-export const GET = async ({ url }) => {
+export const GET = async ({ url }: RequestEvent) => {
 	// ### If ever need to check if an Authorization is set in the headers of the request
 	// const authHeader = request.headers.get("Authorization");
 	// if (!authHeader) {
@@ -20,7 +21,7 @@ export const GET = async ({ url }) => {
 		});
 };
 
-export const POST = async ({ request }) => {
+export const POST = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const form = await superValidate({ ...body }, projectSchema);
 
@@ -38,7 +39,7 @@ export const POST = async ({ request }) => {
 		});
 };
 
-export const PATCH = async ({ request }) => {
+export const PATCH = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const isOk: any = await updateOne(Project, body);
 
@@ -48,7 +49,7 @@ export const PATCH = async ({ request }) => {
 		});
 };
 
-export const DELETE = async ({ request }) => {
+export const DELETE = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const isOk: any = await deleteOne(Project, body.id);
 

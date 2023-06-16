@@ -9,9 +9,20 @@ import { superValidate } from "sveltekit-superforms/server";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const fetchPermissions = async () => {
+		const aggregate = encodeURI(
+			JSON.stringify([
+				{
+					$project: {
+						read: 0,
+						write: 0
+					}
+				}
+			])
+		);
+
 		return await api({
 			fetch,
-			url: "/api/permissions",
+			url: `/api/permissions?aggregate=${aggregate}`,
 			method: "GET",
 			errorMessage: "Problem retrieving permissions from the database."
 		});

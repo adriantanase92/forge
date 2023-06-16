@@ -55,8 +55,9 @@ const userSchema = new Schema(
 			type: Date
 		},
 		projects: {
-			type: [mongoose.Types.ObjectId],
-			ref: "Project"
+			type: [String]
+			// type: [mongoose.Types.ObjectId],
+			// ref: "Project"
 		}
 	},
 	{ timestamps: true }

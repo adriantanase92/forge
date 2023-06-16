@@ -18,9 +18,10 @@ const taskSchema = new Schema(
 			required: true
 		},
 		project: {
-			type: mongoose.Types.ObjectId,
-			ref: "Project",
-			required: true
+			type: String
+			// type: mongoose.Types.ObjectId,
+			// ref: "Project",
+			// required: true
 		},
 		priority: {
 			type: String,

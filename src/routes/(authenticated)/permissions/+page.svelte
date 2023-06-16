@@ -15,7 +15,7 @@
 
 	$: ({ permissions, form } = data);
 
-	$: console.log("permissions: ", permissions);
+	// $: console.log("permissions: ", permissions);
 </script>
 
 <div>
@@ -62,7 +62,7 @@
 		{#if !data}
 			<Loader />
 		{:else}
-			{#each permissions as permission}
+			{#each permissions.items as permission}
 				<div class="p-4 wf__list__item">
 					<div class="wf__list__item__header">
 						<h3 class="px-2 text-primary-500 wf__list__title">

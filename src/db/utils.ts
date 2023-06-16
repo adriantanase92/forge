@@ -39,39 +39,47 @@ export const api = async (options: {
 
 export const getAll = async <T>(model: Model<T>, url: any) => {
 	try {
-		const search = String(url.searchParams.get("search") ?? "");
-		const limit = Number(url.searchParams.get("limit") ?? 10);
 		const page = Number(url.searchParams.get("page") ?? 0);
+		const limit = Number(url.searchParams.get("limit") ?? 10);
 		const skip = page > 0 ? (page - 1) * limit : page * limit;
-		const sort = decodeAndParse(url.searchParams.get("sort") ?? {});
-		const filter = decodeAndParse(url.searchParams.get("filter") ?? {});
-		const projection = decodeAndParse(url.searchParams.get("projection") ?? {});
-		const populate = decodeAndParse(url.searchParams.get("populate") ?? {});
+		const sort = decodeAndParse(url.searchParams.get("sort")) ?? {
+			createdAt: -1
+		};
+		const aggregate = decodeAndParse(url.searchParams.get("aggregate") ?? {});
 
-		console.log("populate: ", populate);
+		const data = await model.aggregate([
+			...aggregate,
+			{
+				$facet: {
+					items: [
+						{
+							$sort: {
+								...sort
+							}
+						},
+						{
+							$skip: skip
+						},
+						{
+							$limit: limit
+						}
+					],
+					total: [{ $count: "total" }]
+				}
+			}
+		]);
 
-		const query = model
-			.find({ ...filter }, { ...projection })
-			.populate(!isObjectEmpty(populate) ? { ...populate } : "");
-		const total = await model
-			.find({ ...filter }, { ...projection })
-			// .populate(!isObjectEmpty(populate) ? { ...populate } : "")
-			.countDocuments()
-			.exec();
-
-		const data = await query
-			.sort({ ...sort })
-			.skip(skip)
-			.limit(limit)
-			.lean();
+		const dataWithPagination = {
+			items: data[0].items,
+			pagination: {
+				total: data[0].total,
+				page
+			}
+		};
 
 		return {
 			success: true,
-			data: {
-				data,
-				page,
-				lastPage: Math.ceil(total / limit)
-			}
+			data: dataWithPagination
 		};
 	} catch (error: any) {
 		console.error(error.message);

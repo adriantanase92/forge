@@ -131,7 +131,7 @@
 		{#if !data}
 			<Loader />
 		{:else}
-			{#each roles as role}
+			{#each roles.items as role}
 				<div class="wf__list__item p-4">
 					<div class="wf__list__item__header mb-4">
 						<h3 class="px-2 text-primary-500 wf__list__title">{role.name}</h3>

@@ -23,5 +23,13 @@ export const isObjectEmpty = (objectName: {}): boolean => {
 	);
 };
 
+export const isJSON = (str: string): boolean => {
+	try {
+		return JSON.parse(str) && !!str;
+	} catch (e) {
+		return false;
+	}
+};
+
 export const decodeAndParse = (value: string | object): any =>
-	typeof value === "object" ? {} : JSON.parse(decodeURI(value));
+	typeof value === "object" ? null : JSON.parse(decodeURI(value));

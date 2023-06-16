@@ -6,37 +6,37 @@ import { ObjectId } from "mongodb";
 /* ------- Permissions ------ */
 export const permissionsList = [
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "permissions",
 		read: false,
 		write: false
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "roles",
 		read: false,
 		write: false
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "users",
 		read: false,
 		write: false
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "projects",
 		read: false,
 		write: false
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "tasks",
 		read: false,
 		write: false
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		name: "invoices",
 		read: false,
 		write: false
@@ -47,12 +47,13 @@ export const permissionsList = [
 /* ------- Roles ------ */
 export const rolesList = [
 	{
-		id: new ObjectId("64770a6aab3dfa88bf4966eb"),
+		_id: new ObjectId("648c123c847c98f99ed8d7a6"),
+		id: crypto.randomUUID(),
 		name: "admin",
 		permissions: [
 			...permissionsList.map((permission) => {
 				return {
-					id: new ObjectId(),
+					id: crypto.randomUUID(),
 					name: permission.name,
 					read: true,
 					write: true
@@ -61,7 +62,8 @@ export const rolesList = [
 		]
 	},
 	{
-		id: new ObjectId("64770a6aab3dfa88bf4966ea"),
+		_id: new ObjectId("648c1245393c753289188c43"),
+		id: crypto.randomUUID(),
 		name: "client",
 		permissions: [
 			...permissionsList.map((permission) => {
@@ -73,7 +75,7 @@ export const rolesList = [
 						: false;
 
 				return {
-					id: new ObjectId(),
+					id: crypto.randomUUID(),
 					name: permission.name,
 					read: access,
 					write: access
@@ -90,21 +92,21 @@ const hash = hashSync("Admin@1", salt);
 
 const admins = [
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		avatar: faker.image.avatar(),
 		firstName: "Adrian",
 		lastName: "Tanase",
-		role: new ObjectId("64770a6aab3dfa88bf4966eb"),
+		role: new ObjectId("648c123c847c98f99ed8d7a6"),
 		email: "tanase.adrian92@gmail.com",
 		password: hash,
 		phone: faker.phone.number("+40 7## ### ###"),
 		birthday: faker.date.birthdate({ min: 18, max: 65 })
 	},
 	{
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		firstName: "Andreea",
 		lastName: "Dragu",
-		role: new ObjectId("64770a6aab3dfa88bf4966eb"),
+		role: new ObjectId("648c123c847c98f99ed8d7a6"),
 		email: "a.dragu93@gmail.com",
 		password: hash,
 		phone: faker.phone.number("+40 7## ### ###"),
@@ -115,23 +117,23 @@ const admins = [
 const generateRandomUser = (role: "client" | "intermediary"): any => {
 	const firstName = faker.person.firstName();
 	const lastName = faker.person.lastName();
-	const roleId = rolesList.filter((r) => r.name === role)[0].id;
+	// const roleId = rolesList.filter((r) => r.name === role)[0].id;
 
 	const user = {
-		id: new ObjectId(),
+		id: crypto.randomUUID(),
 		avatar: faker.image.avatar(),
 		birthday: faker.date.birthdate({ min: 18, max: 65 }),
 		email: faker.internet.email({ firstName, lastName }),
 		firstName,
 		lastName,
-		role: roleId,
+		role: new ObjectId("648c1245393c753289188c43"),
 		password: hash,
 		phone: faker.phone.number("+40 7## ### ###")
 	};
 
 	if (role === "client") {
-		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(
-			() => new ObjectId()
+		const projectsIds = [...Array(getRandomIntFromInterval(1, 3))].map(() =>
+			crypto.randomUUID()
 		);
 
 		return {
@@ -150,8 +152,8 @@ export const usersList = [...admins, ...clients];
 
 /* ------- Projects ------ */
 const generateProject = (id: string, clientId: string): any => {
-	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(
-		() => new ObjectId()
+	const tasksIds = [...Array(getRandomIntFromInterval(5, 10))].map(() =>
+		crypto.randomUUID()
 	);
 
 	return {

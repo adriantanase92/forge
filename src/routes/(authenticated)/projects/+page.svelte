@@ -21,7 +21,7 @@
 	</header>
 
 	<div class="grid gap-4 grid-cols-3 projects">
-		{#each projects as project}
+		{#each projects.items as project}
 			<a class="project" href="/projects/{project.id}">
 				{capitalizeEveryWord(project.name)}
 				<img

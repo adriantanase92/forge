@@ -1,6 +1,6 @@
-import { statusesEnum } from "$db/enums.js";
+import { statusesEnum } from "$shared/db/enums.js";
 import mongoose from "mongoose";
-import { Task } from "./Task.js";
+import { Task } from "$features/tasks/schemas/task.schemas.js";
 
 const { Schema, model } = mongoose;
 

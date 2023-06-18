@@ -1,5 +1,5 @@
-import { Project } from "$db/schemas/Project.js";
-import { getOne } from "$db/utils.js";
+import { Project } from "$features/projects/schemas/project.schema.js";
+import { getOne } from "$shared/db/utils.js";
 
 export const GET = async ({ params }) => {
 	const data = await getOne(Project, params.id);

@@ -7,11 +7,11 @@ import {
 	usersList
 } from "./seedUtils.js";
 import { createMany } from "./utils.js";
-import { Permission } from "./schemas/Permission.js";
-import { Role } from "./schemas/Role.js";
-import { User } from "./schemas/User.js";
-import { Project } from "./schemas/Project.js";
-import { Task } from "./schemas/Task.js";
+import { Permission } from "$features/permissions/schemas/permission.schema.js";
+import { Role } from "$features/roles/schemas/role.schema.js";
+import { User } from "$features/users/schemas/user.schemas.js";
+import { Project } from "$features/projects/schemas/project.schema.js";
+import { Task } from "$features/tasks/schemas/task.schemas.js";
 
 async function seedCollection<T>(model: Model<T>, items: any) {
 	try {

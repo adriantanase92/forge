@@ -1,5 +1,5 @@
-import { Role } from "$db/schemas/Role.js";
-import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
+import { Role } from "$features/roles/schemas/role.schema.js";
+import { createOne, deleteOne, getAll, updateOne } from "$shared/db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const GET = async ({ request, url }: RequestEvent) => {

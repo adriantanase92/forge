@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { PageData } from "./$types.js";
-	import Field from "$lib/components/general/Field/Field.svelte";
+	import Field from "$shared/components/Form/Field/Field.svelte";
 	import { superForm } from "sveltekit-superforms/client";
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
-	import { crudProjectSchema } from "$lib/form-schemas/project.js";
-	import { addFormFields } from "../form-fields.js";
-	import Spinner from "$lib/components/general/Spinner.svelte";
+	import { crudProjectSchema } from "$features/projects/forms/validations.js";
+	import { addFormFields } from "$features/projects/forms/fields.js";
+	import Spinner from "$shared/components/Spinner.svelte";
 	import { page } from "$app/stores";
 	import { toastStore } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";

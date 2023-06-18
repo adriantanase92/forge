@@ -1,4 +1,4 @@
-import { start_mongo } from "$db/mongo.js";
+import { start_mongo } from "$shared/db/mongo.js";
 
 start_mongo()
 	.then(() => {

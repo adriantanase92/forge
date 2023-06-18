@@ -1,4 +1,4 @@
-import { decodeAndParse, isObjectEmpty } from "$lib/utils/helpers.js";
+import { decodeAndParse } from "$shared/utils/helpers.js";
 import { fail } from "@sveltejs/kit";
 import type { FilterQuery, Model, QueryOptions, UpdateQuery } from "mongoose";
 

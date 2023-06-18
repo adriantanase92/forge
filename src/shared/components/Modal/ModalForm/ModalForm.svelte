@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { modalStore } from "@skeletonlabs/skeleton";
-	import Field from "$lib/components/general/Field/Field.svelte";
-	import { notification } from "$lib/utils/notifications.js";
+	import Field from "$shared/components/Form/Field/Field.svelte";
+	import { notification } from "$shared/utils/notifications.js";
 	import { superForm } from "sveltekit-superforms/client";
 	import type { ModalProps } from "./types.js";
 

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Role } from "./Role.js";
+import { Role } from "$features/roles/schemas/role.schema.js";
 
 const { Schema, model } = mongoose;
 

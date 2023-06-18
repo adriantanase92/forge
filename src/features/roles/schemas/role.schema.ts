@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { permissionSchema } from "./Permission.js";
+import { permissionSchema } from "$features/permissions/schemas/permission.schema.js";
 
 const { Schema, model } = mongoose;
 

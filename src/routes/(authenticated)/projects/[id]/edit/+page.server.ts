@@ -1,7 +1,7 @@
-import { message, superValidate } from "sveltekit-superforms/server";
+import { superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types.js";
-import { crudProjectSchema } from "$lib/form-schemas/project.js";
-import { api } from "$db/utils.js";
+import { crudProjectSchema } from "$features/projects/forms/validations.js";
+import { api } from "$shared/db/utils.js";
 
 export const load: PageServerLoad = (async ({ fetch, params }) => {
 	const fetchClients = async () => {

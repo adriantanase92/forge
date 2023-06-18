@@ -1,6 +1,6 @@
-import { Project } from "$db/schemas/Project.js";
-import { createOne, deleteOne, getAll, updateOne } from "$db/utils.js";
-import { projectSchema } from "$lib/form-schemas/project.js";
+import { Project } from "$features/projects/schemas/project.schema.js";
+import { createOne, deleteOne, getAll, updateOne } from "$shared/db/utils.js";
+import { projectSchema } from "$features/projects/forms/validations.js";
 import type { RequestEvent } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 

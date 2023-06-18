@@ -1,7 +1,7 @@
-import { api } from "$db/utils.js";
+import { api } from "$shared/db/utils.js";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
-import { crudPermissionSchema } from "$lib/form-schemas/permission.js";
+import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
 import { superValidate } from "sveltekit-superforms/server";
 
 export const load: PageServerLoad = async ({ fetch }) => {

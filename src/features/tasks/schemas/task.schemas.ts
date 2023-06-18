@@ -1,4 +1,4 @@
-import { columnsEnum, prioritiesEnum } from "$db/enums.js";
+import { columnsEnum, prioritiesEnum } from "$shared/db/enums.js";
 import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;

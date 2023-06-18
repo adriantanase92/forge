@@ -8,9 +8,7 @@
 <div>
 	{#each clients.items as client}
 		<h1>
-			<a href="/clients/client/{client.id}"
-				>{client.firstName} {client.lastName}</a
-			>
+			<a href="/clients/{client.id}">{client.firstName} {client.lastName}</a>
 		</h1>
 	{/each}
 </div>

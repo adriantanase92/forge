@@ -3,8 +3,10 @@
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
 	import Loader from "$shared/components/Loader.svelte";
 	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
-	import { actionModalForm } from "$shared/components/Modal/ModalForm/helpers.js";
-	import { submitDeleteItem } from "$shared/utils/form.js";
+	import {
+		submitDeleteItem,
+		actionModalForm
+	} from "$shared/components/Modal/ModalForm/helpers.js";
 	import type { PageData } from "./$types.js";
 	import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
 

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { modalStore } from "@skeletonlabs/skeleton";
+	import { modalStore, toastStore } from "@skeletonlabs/skeleton";
 	import Field from "$shared/components/Form/Field/Field.svelte";
-	import { notification } from "$shared/utils/notifications.js";
 	import { superForm } from "sveltekit-superforms/client";
 	import type { ModalProps } from "./types.js";
 
@@ -38,14 +37,14 @@
 			console.log("form la onUpdated: ", form);
 
 			if (!form.valid) {
-				notification({
-					type: "error",
-					message: props.form.messages.error
+				toastStore.trigger({
+					message: props.form.messages.error,
+					background: "variant-filled-error"
 				});
 			} else {
-				notification({
-					type: "success",
-					message: props.form.messages.success
+				toastStore.trigger({
+					message: props.form.messages.success,
+					background: "variant-filled-success"
 				});
 				modalStore.close();
 			}

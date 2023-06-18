@@ -7,8 +7,10 @@
 	import { invalidate } from "$app/navigation";
 	import { onMount } from "svelte";
 	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
-	import { actionModalForm } from "$shared/components/Modal/ModalForm/helpers.js";
-	import { submitDeleteItem } from "$shared/utils/form.js";
+	import {
+		actionModalForm,
+		submitDeleteItem
+	} from "$shared/components/Modal/ModalForm/helpers.js";
 
 	export let data;
 	let permissions: any[] = [];

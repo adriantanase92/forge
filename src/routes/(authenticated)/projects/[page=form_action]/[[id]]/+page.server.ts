@@ -3,7 +3,10 @@ import type { Actions, PageServerLoad } from "./$types.js";
 import { crudProjectSchema } from "$features/projects/forms/validations.js";
 import { api } from "$shared/db/utils.js";
 
-export const load: PageServerLoad = (async ({ fetch }) => {
+export const load: PageServerLoad = (async ({ fetch, params }) => {
+	console.log("params: ", params);
+	let form: any;
+
 	const fetchClients = async () => {
 		const aggregate = encodeURI(
 			JSON.stringify([
@@ -39,10 +42,21 @@ export const load: PageServerLoad = (async ({ fetch }) => {
 		});
 	};
 
-	const form = await superValidate(crudProjectSchema);
+	if (params.hasOwnProperty("id")) {
+		const project = await api({
+			fetch,
+			url: `/api/projects/${params.id}`,
+			method: "GET",
+			errorMessage: "Problem retrieving project from the database."
+		});
+		form = await superValidate(project.data, crudProjectSchema);
+	} else {
+		form = await superValidate(crudProjectSchema);
+	}
 
 	return {
 		clients: fetchClients(),
+		pageName: params.page,
 		form
 	};
 }) satisfies PageServerLoad;
@@ -56,22 +70,27 @@ export const actions = {
 			return message(form, "Invalid form");
 		}
 
-		const { id, ...rest } = form.data;
-
-		const generatedId = crypto.randomUUID();
-		const project = {
-			id: generatedId,
-			...rest
-		};
-
 		try {
-			await api({
-				fetch,
-				url: "/api/projects",
-				method: "POST",
-				data: project,
-				errorMessage: "Problem inserting into database."
-			});
+			if (!form.data.id) {
+				// Create project
+				const { id, ...rest } = form.data;
+
+				const generatedId = crypto.randomUUID();
+				const project = {
+					id: generatedId,
+					...rest
+				};
+
+				await api({
+					fetch,
+					url: "/api/projects",
+					method: "POST",
+					data: project,
+					errorMessage: "Problem inserting into database."
+				});
+			} else {
+				// Update project
+			}
 
 			return { form };
 		} catch (error) {

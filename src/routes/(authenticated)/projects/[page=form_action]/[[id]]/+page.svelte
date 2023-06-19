@@ -5,11 +5,12 @@
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
 	import { crudProjectSchema } from "$features/projects/forms/validations.js";
-	import { addFormFields } from "$features/projects/forms/fields.js";
+	import { addEditProjectfields } from "$features/projects/forms/fields.js";
 	import Spinner from "$shared/components/Spinner.svelte";
 	import { page } from "$app/stores";
 	import { toastStore } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
+	import { capitalizeEveryWord } from "$shared/utils/helpers.js";
 
 	export let data: PageData;
 
@@ -28,18 +29,26 @@
 	});
 	const { form: formData, message, enhance, delayed } = form;
 
-	$: ({ clients, project } = data);
-	// $: console.log("clients: ", clients);
-	$: console.log("project: ", project);
+	$: ({ clients, pageName } = data);
 	$: clientsSelectedOptions = clients.items.map((client: any) => ({
 		value: client._id,
 		text: `${client.firstName} ${client.lastName}`
 	}));
+	$: submitButtonText = `${capitalizeEveryWord(pageName)} Project`;
+	$: pageTitle =
+		$formData.name !== ""
+			? `Edit Project - <span class="text-primary-500 font-semibold">${$formData.name}</span>`
+			: "Add Project";
+	// $: console.log("clients: ", clients);
 	// $: console.log("form: ", form);
+	// $: console.log("data: ", data);
 </script>
 
+{$formData.id}
+{JSON.stringify($formData)}
+
 <header class="mb-6 wf__page__header">
-	<h2 class="h1 wf__page__title">Edit New Project</h2>
+	<h2 class="h1 wf__page__title">{@html pageTitle}</h2>
 	<a class="btn btn-sm variant-filled-primary" href="/projects">
 		<span><IconArrowBack size={20} /></span>
 		<span>Back to projects</span>
@@ -56,9 +65,9 @@
 	</div>
 {/if}
 
-<form id="addForm" class="wf__form" method="POST" use:enhance>
+<form id="addEditform" class="wf__form" method="POST" use:enhance>
 	<div class="grid gap-2 grid-cols-3 mb-6">
-		{#each addFormFields(clientsSelectedOptions) as field}
+		{#each addEditProjectfields(clientsSelectedOptions) as field}
 			<Field {form} field={field.id} {...field} />
 		{/each}
 	</div>
@@ -72,11 +81,11 @@
 		<button
 			type="submit"
 			class="btn variant-filled-primary"
-			form="addForm"
+			form="addEditform"
 			disabled={$delayed}
 		>
 			{#if $delayed}<Spinner classes="mr-2" />{/if}
-			Update Project
+			{submitButtonText}
 		</button>
 	</div>
 </form>

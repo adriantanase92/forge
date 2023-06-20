@@ -25,10 +25,8 @@ const projectSchema = new Schema(
 				"https://theperfectroundgolf.com/wp-content/uploads/2022/04/placeholder.png"
 		},
 		client: {
-			type: String
-			// type: mongoose.Types.ObjectId,
-			// ref: "User",
-			// required: true
+			type: String,
+			required: true
 		},
 		status: {
 			type: String,

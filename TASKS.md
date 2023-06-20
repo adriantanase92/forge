@@ -1,5 +1,9 @@
 # Tasks
 
+- ~~de schimbat architectura proiectului~~
+- la project rezolva problema cu id-ul de client, la db schema, la cum se
+  trimite si cum se primeste in form
+
 - mai ai de rezolvat update-ul pentru projects
 - mai ai de rezolvat delete-ul pentru projects
 

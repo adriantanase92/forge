@@ -41,7 +41,15 @@ export const POST = async ({ request }: RequestEvent) => {
 
 export const PATCH = async ({ request }: RequestEvent) => {
 	const body = await request.json();
-	const isOk: any = await updateOne(Project, body);
+	const form = await superValidate({ ...body.update }, projectSchema);
+
+	if (!form.valid) {
+		return new Response(JSON.stringify(form), {
+			status: 400
+		});
+	}
+
+	const isOk: any = await updateOne(Project, { ...body });
 
 	if (isOk.success)
 		return new Response(JSON.stringify({ message: "Success" }), {

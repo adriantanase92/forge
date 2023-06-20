@@ -40,7 +40,7 @@ export const api = async (options: {
 export const getAll = async <T>(model: Model<T>, url: any) => {
 	try {
 		const page = Number(url.searchParams.get("page") ?? 0);
-		const limit = Number(url.searchParams.get("limit") ?? 10);
+		const limit = Number(url.searchParams.get("limit") ?? 0);
 		const skip = page > 0 ? (page - 1) * limit : page * limit;
 		const sort = decodeAndParse(url.searchParams.get("sort")) ?? {
 			createdAt: -1
@@ -48,6 +48,18 @@ export const getAll = async <T>(model: Model<T>, url: any) => {
 		const aggregate = decodeAndParse(url.searchParams.get("aggregate")) ?? [
 			{ $match: { _id: { $exists: true } } }
 		];
+
+		let options = [];
+		if (limit !== 0) {
+			options.push(
+				{
+					$skip: skip
+				},
+				{
+					$limit: limit
+				}
+			);
+		}
 
 		const data = await model.aggregate([
 			...aggregate,
@@ -59,12 +71,7 @@ export const getAll = async <T>(model: Model<T>, url: any) => {
 								...sort
 							}
 						},
-						{
-							$skip: skip
-						},
-						{
-							$limit: limit
-						}
+						...options
 					],
 					total: [{ $count: "total" }]
 				}
@@ -115,7 +122,7 @@ export const createOne = async <T>(model: Model<T>, item: any) => {
 
 export const createMany = async <T>(model: Model<T>, items: any[]) => {
 	try {
-		model.insertMany(items);
+		await model.insertMany(items);
 
 		return {
 			success: true
@@ -134,10 +141,10 @@ export const updateOne = async <T>(
 	}
 ) => {
 	try {
-		model.findOneAndUpdate(
+		await model.updateOne(
 			{ ...data.filter },
 			{ $set: { ...data.update } },
-			{ new: true }
+			data.options ?? null
 		);
 
 		return {
@@ -150,7 +157,7 @@ export const updateOne = async <T>(
 
 export const deleteOne = async <T>(model: Model<T>, id: string) => {
 	try {
-		model.findOneAndDelete({ id });
+		await model.findOneAndDelete({ id });
 
 		return {
 			success: true

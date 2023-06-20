@@ -49,7 +49,7 @@
 </script>
 
 <div class="wf__form__group">
-	{#if type !== "checkbox" && type !== "radio"}
+	{#if type !== "checkbox" && type !== "radio" && type !== "hidden"}
 		<label for={id} class="label wf__form__label">{label}</label>
 	{/if}
 
@@ -72,6 +72,7 @@
 				name={String(field)}
 				bind:value={$value}
 				{disabled}
+				{readonly}
 			/>
 		{:else}
 			<input

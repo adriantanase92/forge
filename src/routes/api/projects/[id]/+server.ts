@@ -2,7 +2,10 @@ import { Project } from "$features/projects/schemas/project.schema.js";
 import { getOne } from "$shared/db/utils.js";
 
 export const GET = async ({ params }) => {
-	const data = await getOne(Project, params.id);
+	const isOk: any = await getOne(Project, params.id);
 
-	return new Response(JSON.stringify(data));
+	if (isOk.success)
+		return new Response(JSON.stringify(isOk.data), {
+			status: 200
+		});
 };

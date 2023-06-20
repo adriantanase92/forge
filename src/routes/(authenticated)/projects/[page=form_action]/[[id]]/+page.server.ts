@@ -49,7 +49,7 @@ export const load: PageServerLoad = (async ({ fetch, params }) => {
 			method: "GET",
 			errorMessage: "Problem retrieving project from the database."
 		});
-		form = await superValidate(project.data, crudProjectSchema);
+		form = await superValidate(project, crudProjectSchema);
 	} else {
 		form = await superValidate(crudProjectSchema);
 	}
@@ -71,10 +71,10 @@ export const actions = {
 		}
 
 		try {
-			if (!form.data.id) {
-				// Create project
-				const { id, ...rest } = form.data;
+			const { id, ...rest } = form.data;
 
+			if (!id) {
+				// Create project
 				const generatedId = crypto.randomUUID();
 				const project = {
 					id: generatedId,
@@ -90,6 +90,20 @@ export const actions = {
 				});
 			} else {
 				// Update project
+				const data = {
+					filter: { id },
+					update: {
+						...form.data
+					}
+				};
+
+				await api({
+					fetch,
+					url: "/api/projects",
+					method: "PATCH",
+					data,
+					errorMessage: "Problem updating project."
+				});
 			}
 
 			return { form };

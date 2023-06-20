@@ -31,9 +31,10 @@
 
 	$: ({ clients, pageName } = data);
 	$: clientsSelectedOptions = clients.items.map((client: any) => ({
-		value: client._id,
+		value: client.id,
 		text: `${client.firstName} ${client.lastName}`
 	}));
+	$: fields = addEditProjectfields(clientsSelectedOptions);
 	$: submitButtonText = `${capitalizeEveryWord(pageName)} Project`;
 	$: pageTitle =
 		$formData.name !== ""
@@ -44,12 +45,9 @@
 	// $: console.log("data: ", data);
 </script>
 
-{$formData.id}
-{JSON.stringify($formData)}
-
 <header class="mb-6 wf__page__header">
 	<h2 class="h1 wf__page__title">{@html pageTitle}</h2>
-	<a class="btn btn-sm variant-filled-primary" href="/projects">
+	<a class="btn btn-sm variant-filled" href="/projects">
 		<span><IconArrowBack size={20} /></span>
 		<span>Back to projects</span>
 	</a>
@@ -66,8 +64,10 @@
 {/if}
 
 <form id="addEditform" class="wf__form" method="POST" use:enhance>
+	<input type="hidden" name="id" bind:value={$formData.id} />
+
 	<div class="grid gap-2 grid-cols-3 mb-6">
-		{#each addEditProjectfields(clientsSelectedOptions) as field}
+		{#each fields as field}
 			<Field {form} field={field.id} {...field} />
 		{/each}
 	</div>

@@ -6,9 +6,9 @@
 </script>
 
 <div>
-	{#each users as user}
+	{#each users.items as user}
 		<h1>
-			<a href="/users/user/{user.id}">{user.firstName} {user.lastName}</a>
+			<a href="/users/{user.id}">{user.firstName} {user.lastName}</a>
 		</h1>
 	{/each}
 </div>

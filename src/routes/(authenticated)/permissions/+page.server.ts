@@ -1,37 +1,79 @@
-import { api } from "$db/utils.js";
+import { api } from "$shared/db/utils.js";
 import { fail } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types.js";
+import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
+import { superValidate } from "sveltekit-superforms/server";
 
-export const actions = {
-	create: async ({ request, fetch }) => {
-		const formData = await request.formData();
-		const name = formData.get("name");
-		const id = crypto.randomUUID();
-
-		const permission = {
-			id,
-			name
-		};
+export const load: PageServerLoad = async ({ fetch }) => {
+	const fetchPermissions = async () => {
+		const aggregate = encodeURI(
+			JSON.stringify([
+				{
+					$project: {
+						read: 0,
+						write: 0
+					}
+				}
+			])
+		);
 
 		return await api({
+			fetch,
+			url: `/api/permissions?aggregate=${aggregate}`,
+			method: "GET",
+			errorMessage: "Problem retrieving permissions from the database."
+		});
+	};
+
+	const form = await superValidate(crudPermissionSchema);
+
+	return {
+		permissions: fetchPermissions(),
+		form
+	};
+};
+
+export const actions = {
+	create: async ({ request, fetch }: any) => {
+		const formData = await request.formData();
+		const form = await superValidate(formData, crudPermissionSchema);
+
+		if (!form.valid)
+			return fail(400, {
+				error: true,
+				message: "Invalid form"
+			});
+
+		const id = crypto.randomUUID();
+		const permission = {
+			id,
+			...form.data
+		};
+
+		await api({
 			fetch,
 			url: "/api/permissions",
 			method: "POST",
 			data: permission,
 			errorMessage: "Problem inserting into database."
 		});
+
+		return { form };
 	},
 	update: async ({ request, fetch }) => {
 		const formData = await request.formData();
-		const id = formData.get("id");
-		const name = formData.get("name");
+		const form = await superValidate(formData, crudPermissionSchema);
 
-		if (typeof name === "string" && name?.length < 2) {
+		console.log("form data on the server: ", form.data);
+
+		if (!form.valid)
 			return fail(400, {
 				error: true,
-				message: "Name must be at least 2 characters.",
-				name
+				message: "Invalid form"
 			});
-		}
+
+		const id = form.data.id;
+		const name = form.data.name;
 
 		const data = {
 			filter: { id },
@@ -40,13 +82,15 @@ export const actions = {
 			}
 		};
 
-		return await api({
+		await api({
 			fetch,
 			url: "/api/permissions",
 			method: "PATCH",
 			data: data,
 			errorMessage: "Problem updating permission."
 		});
+
+		return { form };
 	},
 	delete: async ({ request, fetch }) => {
 		const formData = await request.formData();
@@ -60,4 +104,4 @@ export const actions = {
 			errorMessage: "Problem deleting permission."
 		});
 	}
-};
+} satisfies Actions;

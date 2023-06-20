@@ -1,6 +1,8 @@
-import { users } from "$db/collections.js";
+import { User } from "$features/users/schemas/user.schemas.js";
+import { getAll } from "$shared/db/utils.js";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export const GET = async ({ request, url }) => {
+export const GET = async ({ url }: RequestEvent) => {
 	// ### If ever need to check if an Authorization is set in the headers of the request
 	// const authHeader = request.headers.get("Authorization");
 	// if (!authHeader) {
@@ -9,23 +11,16 @@ export const GET = async ({ request, url }) => {
 	// 	});
 	// }
 
-	const limit = Number(url.searchParams.get("limit") ?? 10);
-	const skip = Number(url.searchParams.get("skip") ?? 0);
+	const isOk: any = await getAll(User, url);
 
-	const data = await users.find().toArray();
-
-	return new Response(JSON.stringify(data), { status: 200 });
+	if (isOk.success)
+		return new Response(JSON.stringify(isOk.data), {
+			status: 200
+		});
 };
 
 // export const POST = async ({ request }) => {
 // 	const body = await request.json();
-// 	// ### If ever need to check if an Authorization is set in the headers of the request
-// 	// const authHeader = request.headers.get("Authorization");
-// 	// if (!authHeader) {
-// 	// 	return new Response(JSON.stringify({ message: "Invalid credentials" }), {
-// 	// 		status: 401
-// 	// 	});
-// 	// }
 
 // 	console.log(body);
 

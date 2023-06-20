@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import AddPermissionForm from "$components/specific/permissions/AddPermissionForm.svelte";
-	import UpdatePermissionForm from "$components/specific/permissions/UpdatePermissionForm.svelte";
-	import Loader from "$lib/components/general/Loader.svelte";
-	import { actionModal, submitDeleteItem } from "$lib/utils/helpers.js";
+	import Loader from "$shared/components/Loader.svelte";
+	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
+	import {
+		submitDeleteItem,
+		actionModalForm
+	} from "$shared/components/Modal/ModalForm/helpers.js";
+	import type { PageData } from "./$types.js";
+	import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
 
-	export let data;
+	export let data: PageData;
 
-	$: ({ permissions } = data);
+	$: ({ permissions, form } = data);
+
+	$: console.log("permissions: ", permissions);
 </script>
 
 <div>
@@ -18,9 +24,32 @@
 			type="button"
 			class="btn btn-sm variant-filled-primary"
 			on:click={() =>
-				actionModal({
-					ref: AddPermissionForm,
-					title: "Add New Permission"
+				actionModalForm({
+					ref: ModalForm,
+					props: {
+						modalId: "addPermissionModal",
+						form: {
+							data: form,
+							id: "addPermissionForm",
+							action: "create",
+							schema: crudPermissionSchema,
+							fields: [
+								{
+									id: "name",
+									type: "text",
+									placeholder: "Enter name...",
+									labelText: "Name",
+									name: "name"
+								}
+							],
+							messages: {
+								success: "Permission added successfully",
+								error: "Permission not added"
+							}
+						}
+					},
+					title: "Add New Permission",
+					buttonTextSubmit: "Create"
 				})}
 		>
 			<span><IconPlus size={20} /></span>
@@ -32,27 +61,68 @@
 		{#if !data}
 			<Loader />
 		{:else}
-			{#each permissions as permission}
+			{#each permissions.items as permission}
 				<div class="p-4 wf__list__item">
 					<div class="wf__list__item__header">
-						<h3 class="px-2 text-primary-500 wf__list__title">{permission.name}</h3>
+						<h3 class="px-2 text-primary-500 wf__list__title">
+							{permission.name}
+						</h3>
 						<div class="wf__list__actions">
 							<button
+								type="button"
 								class="btn variant-filled-primary mr-2"
 								on:click={() =>
-									actionModal({
-										ref: UpdatePermissionForm,
-										props: { permission },
-										title: "Update Permission"
+									actionModalForm({
+										ref: ModalForm,
+										props: {
+											modalId: "updatePermissionModal",
+											form: {
+												data: form,
+												id: "updatePermissionForm",
+												action: "update",
+												schema: crudPermissionSchema,
+												dataToAppend: [
+													{
+														name: "id",
+														value: permission.id
+													}
+												],
+												fields: [
+													{
+														id: "name",
+														type: "text",
+														placeholder: "Enter name...",
+														labelText: "Name",
+														name: "name",
+														valueData: permission.name
+													}
+												],
+												messages: {
+													success: "Permission updated successfully.",
+													error: "Permission not updated."
+												}
+											}
+										},
+										title: "Update Permission",
+										buttonTextSubmit: "Update"
 									})}
 							>
 								<span><IconPencil size={18} /></span>
 								<span>Update</span>
 							</button>
-							<form method="POST" action="?/delete" use:enhance={submitDeleteItem}>
+							<form
+								method="POST"
+								action="?/delete"
+								use:enhance={submitDeleteItem}
+							>
 								<input type="hidden" name="item" hidden value="permission" />
 								<input type="hidden" name="id" hidden value={permission.id} />
-								<input type="hidden" name="name" hidden value={permission.name} />
+								<input
+									type="hidden"
+									name="name"
+									hidden
+									value={permission.name}
+								/>
 								<button type="submit" class="btn variant-filled-error">
 									<span><IconTrashXFilled size={18} /></span>
 									<span>Delete</span>

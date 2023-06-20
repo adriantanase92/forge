@@ -9,7 +9,16 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"lib": ["ES2021", "ES2020", "ES2019", "ES2018", "ES2017", "ES2016", "ES2015", "DOM"],
+		"lib": [
+			"ES2021",
+			"ES2020",
+			"ES2019",
+			"ES2018",
+			"ES2017",
+			"ES2016",
+			"ES2015",
+			"DOM"
+		],
 		"declaration": true,
 		"declarationMap": true,
 		"types": ["vite/client", "svelte"],
@@ -19,16 +28,10 @@
 		"baseUrl": ".",
 		"paths": {
 			// name and path to aliases
-			"$lib": ["src/lib"],
-			"$lib/*": ["./src/lib/*"],
-			"$db": ["src/db"],
-			"$db/*": ["./src/db/*"],
-			"$components": ["src/lib/components"],
-			"$components/*": ["src/lib/components/*"],
-			"$utils": ["src/lib/utils"],
-			"$utils/*": ["src/lib/utils/*"],
-			"$types": ["src/lib/types"],
-			"$types/*": ["src/lib/types/*"]
+			"$shared": ["src/shared"],
+			"$shared/*": ["src/shared/*"],
+			"$features": ["./src/features"],
+			"$features/*": ["./src/features/*"]
 		}
 	},
 	"exclude": ["node_modules", "dist"]

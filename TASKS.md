@@ -1,6 +1,7 @@
 # Tasks
 
 - ~~de schimbat architectura proiectului~~
+- repara bug-urile pentru permissions si role
 - la project rezolva problema cu id-ul de client, la db schema, la cum se
   trimite si cum se primeste in form
 

@@ -1,5 +1,5 @@
 import { Permission } from "$features/permissions/schemas/permission.schema.js";
-import { createOne, deleteOne, getAll, updateOne } from "$shared/db/utils.js";
+import { createOne, deleteOne, getAll, updateOne } from "$common/db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const GET = async ({ url }: RequestEvent) => {

@@ -1,4 +1,4 @@
-import { statusesEnum } from "$shared/db/enums.js";
+import { statusesEnum } from "$common/db/enums.js";
 import mongoose from "mongoose";
 import { Task } from "$features/tasks/schemas/task.schemas.js";
 

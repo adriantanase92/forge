@@ -5,7 +5,7 @@ import {
 	toastStore
 } from "@skeletonlabs/skeleton";
 import type { SubmitFunction } from "@sveltejs/kit";
-import { capitalizeEveryWord } from "$shared/utils/helpers.js";
+import { capitalizeEveryWord } from "$common/utils/helpers.js";
 
 export const submitDeleteItem: SubmitFunction = async ({ data, cancel }) => {
 	const { name, item } = Object.fromEntries(data as any);

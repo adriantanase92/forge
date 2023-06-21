@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import Loader from "$shared/components/Loader.svelte";
+	import Loader from "$common/components/Loader.svelte";
 	import PermissionsList from "$features/roles/components/PermissionsList.svelte";
-	import { api } from "$shared/db/utils.js";
+	import { api } from "$common/db/utils.js";
 	import { invalidate } from "$app/navigation";
 	import { onMount } from "svelte";
-	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
+	import ModalForm from "$common/components/Modal/ModalForm/ModalForm.svelte";
 	import {
 		actionModalForm,
 		submitDeleteItem
-	} from "$shared/components/Modal/ModalForm/helpers.js";
+	} from "$common/components/Modal/ModalForm/helpers.js";
 
 	export let data;
 	let permissions: any[] = [];

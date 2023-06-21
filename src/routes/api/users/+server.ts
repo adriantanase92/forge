@@ -1,5 +1,5 @@
 import { User } from "$features/users/schemas/user.schemas.js";
-import { getAll } from "$shared/db/utils.js";
+import { getAll } from "$common/db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const GET = async ({ url }: RequestEvent) => {

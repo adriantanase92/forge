@@ -4,7 +4,7 @@ import {
 	seedRoles,
 	seedTasks,
 	seedUsers
-} from "$shared/db/seed.js";
+} from "$common/db/seed.js";
 
 export const actions = {
 	seedPermissions: async () => await seedPermissions(),

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { modalStore, toastStore } from "@skeletonlabs/skeleton";
-	import Field from "$shared/components/Form/Field/Field.svelte";
+	import Field from "$common/components/Form/Field/Field.svelte";
 	import { superForm } from "sveltekit-superforms/client";
 	import type { ModalProps } from "./types.js";
 

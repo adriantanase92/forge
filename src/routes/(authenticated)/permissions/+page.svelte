@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import Loader from "$shared/components/Loader.svelte";
-	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
+	import Loader from "$common/components/Loader.svelte";
+	import ModalForm from "$common/components/Modal/ModalForm/ModalForm.svelte";
 	import {
 		submitDeleteItem,
 		actionModalForm
-	} from "$shared/components/Modal/ModalForm/helpers.js";
+	} from "$common/components/Modal/ModalForm/helpers.js";
 	import type { PageData } from "./$types.js";
 	import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
 

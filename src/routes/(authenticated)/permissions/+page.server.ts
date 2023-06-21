@@ -1,4 +1,4 @@
-import { api } from "$shared/db/utils.js";
+import { api } from "$common/db/utils.js";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { crudPermissionSchema } from "$features/permissions/forms/validations.js";

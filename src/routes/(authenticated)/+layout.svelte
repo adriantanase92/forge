@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { sections } from "$shared/utils/sections.js";
+	import { sections } from "$common/utils/sections.js";
 	import {
 		AppBar,
 		AppShell,

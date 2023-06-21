@@ -1,16 +1,16 @@
 <script lang="ts">
 	import type { PageData } from "./$types.js";
-	import Field from "$shared/components/Form/Field/Field.svelte";
+	import Field from "$common/components/Form/Field/Field.svelte";
 	import { superForm } from "sveltekit-superforms/client";
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
 	import { crudProjectSchema } from "$features/projects/forms/validations.js";
 	import { addEditProjectfields } from "$features/projects/forms/fields.js";
-	import Spinner from "$shared/components/Spinner.svelte";
+	import Spinner from "$common/components/Spinner.svelte";
 	import { page } from "$app/stores";
 	import { toastStore } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
-	import { capitalizeEveryWord } from "$shared/utils/helpers.js";
+	import { capitalizeEveryWord } from "$common/utils/helpers.js";
 
 	export let data: PageData;
 

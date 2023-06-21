@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { getRandomIntFromInterval } from "$shared/utils/helpers.js";
+import { getRandomIntFromInterval } from "$common/utils/helpers.js";
 import { ObjectId } from "mongodb";
 
 /* ------- Permissions ------ */

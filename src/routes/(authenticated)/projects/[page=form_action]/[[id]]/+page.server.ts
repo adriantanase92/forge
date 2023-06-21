@@ -36,7 +36,7 @@ export const load: PageServerLoad = (async ({ fetch, params }) => {
 		);
 		return await api({
 			fetch,
-			url: `/api/users?aggregate=${aggregate}`,
+			url: `/api/users?aggregate=${aggregate}&limit=0`,
 			method: "GET",
 			errorMessage: "Problem retrieving clients from the database."
 		});

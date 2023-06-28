@@ -64,8 +64,6 @@ export const actions = {
 		const formData = await request.formData();
 		const form = await superValidate(formData, crudPermissionSchema);
 
-		console.log("form data on the server: ", form.data);
-
 		if (!form.valid)
 			return fail(400, {
 				error: true,
@@ -86,7 +84,7 @@ export const actions = {
 			fetch,
 			url: "/api/permissions",
 			method: "PATCH",
-			data: data,
+			data,
 			errorMessage: "Problem updating permission."
 		});
 

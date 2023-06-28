@@ -1,4 +1,4 @@
-export const addEditProjectfields = (clients: any[]) => {
+export const addEditFields = (clients: any[]) => {
 	return [
 		{
 			label: "Name",

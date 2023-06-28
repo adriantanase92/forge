@@ -6,6 +6,7 @@ import {
 } from "@skeletonlabs/skeleton";
 import type { SubmitFunction } from "@sveltejs/kit";
 import { capitalizeEveryWord } from "$common/utils/helpers.js";
+import { invalidateAll } from "$app/navigation";
 
 export const submitDeleteItem: SubmitFunction = async ({ data, cancel }) => {
 	const { name, item } = Object.fromEntries(data as any);
@@ -69,3 +70,42 @@ export const actionModalForm = (options: any): void => {
 	};
 	modalStore.trigger(modal);
 };
+
+export const sfFormOptions: any = (props: any) => ({
+	resetForm: true,
+	validators: props.form.schema,
+	validationMethod: "auto",
+	onSubmit({ data }: any) {
+		if (
+			props.form.dataToAppend !== undefined &&
+			props.form.dataToAppend.length > 0
+		) {
+			props.form.dataToAppend.forEach((item: any) => {
+				data.append(item.name, item.value);
+			});
+		}
+
+		return new Promise((resolve) => resolve({ data }));
+	},
+	onResult({ result }: any) {},
+	onUpdate({ form, cancel }: any) {
+		if (!form.valid) {
+			cancel();
+		}
+	},
+	onUpdated({ form }: any) {
+		if (!form.valid) {
+			toastStore.trigger({
+				message: props.form.messages.error,
+				background: "variant-filled-error"
+			});
+		} else {
+			toastStore.trigger({
+				message: props.form.messages.success,
+				background: "variant-filled-success"
+			});
+			invalidateAll();
+			modalStore.close();
+		}
+	}
+});

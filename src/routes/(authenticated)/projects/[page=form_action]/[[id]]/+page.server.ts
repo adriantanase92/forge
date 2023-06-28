@@ -4,7 +4,6 @@ import { crudProjectSchema } from "$features/projects/forms/validations.js";
 import { api } from "$common/db/utils.js";
 
 export const load: PageServerLoad = (async ({ fetch, params }) => {
-	console.log("params: ", params);
 	let form: any;
 
 	const fetchClients = async () => {

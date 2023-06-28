@@ -3,57 +3,34 @@
 	import Field from "$common/components/Form/Field/Field.svelte";
 	import { superForm } from "sveltekit-superforms/client";
 	import type { ModalProps } from "./types.js";
+	import { sfFormOptions } from "./helpers.js";
+	import type { SuperValidated } from "sveltekit-superforms";
 
 	// Props
 	export let parent: any;
 	export let props: ModalProps;
 
-	const form = superForm(props.form.data, {
-		onSubmit({ data }) {
-			if (
-				props.form.dataToAppend !== undefined &&
-				props.form.dataToAppend.length > 0
-			) {
-				props.form.dataToAppend.forEach((item: any) => {
-					data.append(item.name, item.value);
-				});
-			}
+	let form: any = null;
+	let enhance: any = null;
+	const formOptions = sfFormOptions(props);
 
-			console.log("data: ", Object.fromEntries(data as any));
+	$: if (props.form.action === "create") {
+		form = superForm(props.form.data, { ...formOptions });
+		enhance = form.enhance;
+	} else {
+		const validated: SuperValidated<any> = {
+			valid: false,
+			posted: false,
+			data: props.form.data,
+			errors: {},
+			constraints: {}
+		};
 
-			return new Promise((resolve) => resolve({ data }));
-		},
-		onResult({ result }) {
-			console.log("result: ", result);
-		},
-		onUpdate({ form, cancel }) {
-			console.log("form la onUpdate: ", form);
-
-			if (!form.valid) {
-				cancel();
-			}
-		},
-		onUpdated({ form }) {
-			console.log("form la onUpdated: ", form);
-
-			if (!form.valid) {
-				toastStore.trigger({
-					message: props.form.messages.error,
-					background: "variant-filled-error"
-				});
-			} else {
-				toastStore.trigger({
-					message: props.form.messages.success,
-					background: "variant-filled-success"
-				});
-				modalStore.close();
-			}
-		},
-		validators: props.form.schema,
-		validationMethod: "auto"
-	});
-
-	const enhance = form.enhance;
+		form = superForm(validated, {
+			...formOptions
+		});
+		enhance = form.enhance;
+	}
 
 	const formClasses =
 		"modal-form border border-surface-500 p-4 space-y-4 rounded-container-token";

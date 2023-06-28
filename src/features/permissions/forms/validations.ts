@@ -5,7 +5,9 @@ export const permissionSchema = z.object({
 	name: z
 		.string()
 		.trim()
-		.min(2, { message: "Must be 2 or more characters long" })
+		.min(2, { message: "Must be 2 or more characters long" }),
+	read: z.boolean().default(false),
+	write: z.boolean().default(false)
 });
 export type PermissionSchema = typeof permissionSchema;
 

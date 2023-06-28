@@ -5,7 +5,7 @@
 	import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 	import { IconArrowBack } from "@tabler/icons-svelte";
 	import { crudProjectSchema } from "$features/projects/forms/validations.js";
-	import { addEditProjectfields } from "$features/projects/forms/fields.js";
+	import { addEditFields } from "$features/projects/forms/fields.js";
 	import Spinner from "$common/components/Spinner.svelte";
 	import { page } from "$app/stores";
 	import { toastStore } from "@skeletonlabs/skeleton";
@@ -34,7 +34,7 @@
 		value: client.id,
 		text: `${client.firstName} ${client.lastName}`
 	}));
-	$: fields = addEditProjectfields(clientsSelectedOptions);
+	$: fields = addEditFields(clientsSelectedOptions);
 	$: submitButtonText = `${capitalizeEveryWord(pageName)} Project`;
 	$: pageTitle =
 		$formData.name !== ""

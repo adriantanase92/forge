@@ -20,8 +20,6 @@ export const POST = async ({ request }: RequestEvent) => {
 	const body = await request.json();
 	const form = await superValidate({ ...body }, crudPermissionSchema);
 
-	console.log({ ...body });
-
 	if (!form.valid) {
 		return new Response(JSON.stringify(form), {
 			status: 400

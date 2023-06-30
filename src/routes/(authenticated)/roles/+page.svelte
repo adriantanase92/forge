@@ -22,35 +22,34 @@
 
 		if (options.permissionOption === "read" && !options.permissionOptionState) {
 			otherThingsToUpdate = {
-				["permissions.$.write"]: false
+				["permissions.$[permission].write"]: false
 			};
 		}
 
 		if (options.permissionOption === "write" && options.permissionOptionState) {
 			otherThingsToUpdate = {
-				["permissions.$.read"]: true
+				["permissions.$[permission].read"]: true
 			};
 		}
 
 		return {
 			...otherThingsToUpdate,
-			[`permissions.$.${options.permissionOption}`]:
+			[`permissions.$[permission].${options.permissionOption}`]:
 				options.permissionOptionState
 		};
 	};
 
 	const updatePermissionOptionForRole = async (event: any) => {
-		console.log("event.detail: ", event.detail);
 		const roleId = event.detail.roleId;
 		const roleName = event.detail.roleName;
+		const permissionId = event.detail.permissionId;
 		const permissionName = event.detail.permissionName;
 		const permissionOption = event.detail.permissionOption;
 		const permissionOptionState = event.detail.state;
 
 		const data = {
 			filter: {
-				"id": roleId,
-				"permissions.name": permissionName
+				id: roleId
 			},
 			update: updatePermissionOptionsStatesBasedOnChoice({
 				roleName,
@@ -59,6 +58,8 @@
 				permissionOptionState
 			}),
 			options: {
+				arrayFilters: [{ "permission.id": permissionId }],
+				new: true,
 				upsert: true
 			}
 		};

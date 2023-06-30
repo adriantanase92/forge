@@ -36,13 +36,6 @@ export const POST = async ({ request }: RequestEvent) => {
 
 export const PATCH = async ({ request }: RequestEvent) => {
 	const body = await request.json();
-	const form = await superValidate({ ...body.update }, crudRoleSchema);
-
-	if (!form.valid) {
-		return new Response(JSON.stringify(form), {
-			status: 400
-		});
-	}
 
 	const isOk: any = await updateOne(Role, { ...body });
 

@@ -39,6 +39,7 @@
 					onPermissionOptionChange(e, {
 						roleId: role.id,
 						roleName: role.name,
+						permissionId: permission.id,
 						permissionName: permission.name,
 						permissionOption: "read"
 					})}
@@ -56,6 +57,7 @@
 					onPermissionOptionChange(e, {
 						roleId: role.id,
 						roleName: role.name,
+						permissionId: permission.id,
 						permissionName: permission.name,
 						permissionOption: "write"
 					})}

@@ -154,6 +154,7 @@ export const updateOne = async <T>(
 			success: true
 		};
 	} catch (error: any) {
+		console.log("aaaaa, eroare");
 		console.error(error.message);
 	}
 };

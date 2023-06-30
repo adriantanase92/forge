@@ -7,15 +7,7 @@ import {
 	permissionSchema
 } from "$features/permissions/forms/validations.js";
 
-export const GET = async ({ url, params }: RequestEvent) => {
-	// ### If ever need to check if an Authorization is set in the headers of the request
-	// const authHeader = request.headers.get("Authorization");
-	// if (!authHeader) {
-	// 	return new Response(JSON.stringify({ message: "Invalid credentials" }), {
-	// 		status: 401
-	// 	});
-	// }
-
+export const GET = async ({ url }: RequestEvent) => {
 	const isOk: any = await getAll(Permission, url);
 
 	if (isOk.success)
@@ -26,6 +18,16 @@ export const GET = async ({ url, params }: RequestEvent) => {
 
 export const POST = async ({ request }: RequestEvent) => {
 	const body = await request.json();
+	const form = await superValidate({ ...body }, crudPermissionSchema);
+
+	console.log({ ...body });
+
+	if (!form.valid) {
+		return new Response(JSON.stringify(form), {
+			status: 400
+		});
+	}
+
 	const isOk: any = await createOne(Permission, { ...body });
 
 	if (isOk.success)

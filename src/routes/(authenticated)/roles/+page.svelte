@@ -11,18 +11,31 @@
 		actionModalForm,
 		submitDeleteItem
 	} from "$common/components/Modal/ModalForm/helpers.js";
+	import { addEditFields } from "$features/roles/forms/fields.js";
+	import { crudRoleSchema } from "$features/roles/forms/validation.js";
 
 	export let data;
-	let permissions: any[] = [];
+	let permissions: any = null;
 
-	$: ({ roles } = data);
-
-	$: console.log("dat: ", data);
+	$: ({ roles, form } = data);
 
 	onMount(async () => {
+		const aggregate = encodeURI(
+			JSON.stringify([
+				{
+					$project: {
+						_id: 0,
+						__v: 0,
+						createdAt: 0,
+						updatedAt: 0
+					}
+				}
+			])
+		);
+
 		permissions = await api({
 			fetch,
-			url: "/api/permissions",
+			url: `/api/permissions?aggregate=${aggregate}`,
 			method: "GET",
 			errorMessage: "Problem retrieving permissions from the database."
 		});
@@ -100,22 +113,17 @@
 					props: {
 						modalId: "addRoleModal",
 						form: {
+							data: form,
 							id: "addRoleForm",
 							action: "create",
 							dataToAppend: [
 								{
 									name: "permissions",
-									value: JSON.stringify(permissions)
+									value: JSON.stringify(permissions.items)
 								}
 							],
-							fields: [
-								{
-									id: "name",
-									type: "text",
-									placeholder: "Enter name...",
-									labelText: "Name"
-								}
-							],
+							schema: crudRoleSchema,
+							fields: addEditFields(),
 							messages: {
 								success: "Role added successfully",
 								error: "Role not added"
@@ -149,6 +157,7 @@
 										props: {
 											modalId: "updateRoleModal",
 											form: {
+												data: role,
 												id: "updateRoleForm",
 												action: "update",
 												dataToAppend: [
@@ -157,15 +166,7 @@
 														value: role.id
 													}
 												],
-												fields: [
-													{
-														id: "name",
-														type: "text",
-														placeholder: "Enter name...",
-														labelText: "Name",
-														value: role.name
-													}
-												],
+												fields: addEditFields(),
 												messages: {
 													success: "Role updated successfully.",
 													error: "Role not updated."

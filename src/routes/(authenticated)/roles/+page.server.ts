@@ -1,8 +1,10 @@
 import { api } from "$common/db/utils.js";
-import { fail } from "@sveltejs/kit";
+import { fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types.js";
+import { superValidate } from "sveltekit-superforms/server";
+import { crudRoleSchema } from "$features/roles/forms/validation.js";
 
-export const load: PageServerLoad = ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch }) => {
 	const fetchRoles = async () => {
 		return await api({
 			fetch,
@@ -12,65 +14,72 @@ export const load: PageServerLoad = ({ fetch }) => {
 		});
 	};
 
+	const form = await superValidate(crudRoleSchema);
+
 	return {
-		roles: fetchRoles()
+		roles: fetchRoles(),
+		form
 	};
 };
 
 export const actions = {
 	create: async ({ request, fetch }) => {
 		const formData = await request.formData();
-		const id = crypto.randomUUID();
-		const name = formData.get("name");
-		const permissions = formData.get("permissions");
+		const form = await superValidate(formData, crudRoleSchema);
 
-		if (typeof name === "string" && name?.length < 2) {
+		if (!form.valid)
 			return fail(400, {
 				error: true,
-				message: "Name must be at least 2 characters.",
-				name
+				message: "Invalid form"
 			});
-		}
 
+		const id = crypto.randomUUID();
+		const { name, permissions } = form.data;
 		const role = {
 			id,
 			name,
 			permissions: JSON.parse(permissions as any)
 		};
 
-		return await api({
+		await api({
 			fetch,
 			url: "/api/roles",
 			method: "POST",
 			data: role,
 			errorMessage: "Problem inserting into database."
 		});
+
+		return { form };
 	},
 	update: async ({ request, fetch }) => {
 		const formData = await request.formData();
-		const id = formData.get("id");
-		const name = formData.get("name");
+		const form = await superValidate(formData, crudRoleSchema);
 
-		if (typeof name === "string" && name?.length < 2) {
+		if (!form.valid)
 			return fail(400, {
 				error: true,
-				message: "Name must be at least 2 characters.",
-				name
+				message: "Invalid form"
 			});
-		}
+
+		const id = form.data.id;
+		const name = form.data.name;
 
 		const data = {
 			filter: { id },
-			update: { name }
+			update: {
+				name
+			}
 		};
 
-		return await api({
+		await api({
 			fetch,
 			url: "/api/roles",
 			method: "PATCH",
 			data,
 			errorMessage: "Problem updating role."
 		});
+
+		return { form };
 	},
 	delete: async ({ request, fetch }) => {
 		const formData = await request.formData();
@@ -84,4 +93,4 @@ export const actions = {
 			errorMessage: "Problem deleting role."
 		});
 	}
-};
+} satisfies Actions;

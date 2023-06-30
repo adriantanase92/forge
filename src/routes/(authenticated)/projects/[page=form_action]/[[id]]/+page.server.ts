@@ -1,10 +1,9 @@
 import { message, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { crudProjectSchema } from "$features/projects/forms/validations.js";
-import { api } from "$shared/db/utils.js";
+import { api } from "$common/db/utils.js";
 
 export const load: PageServerLoad = (async ({ fetch, params }) => {
-	console.log("params: ", params);
 	let form: any;
 
 	const fetchClients = async () => {
@@ -36,7 +35,7 @@ export const load: PageServerLoad = (async ({ fetch, params }) => {
 		);
 		return await api({
 			fetch,
-			url: `/api/users?aggregate=${aggregate}`,
+			url: `/api/users?aggregate=${aggregate}&limit=0`,
 			method: "GET",
 			errorMessage: "Problem retrieving clients from the database."
 		});

@@ -28,8 +28,8 @@
 		"baseUrl": ".",
 		"paths": {
 			// name and path to aliases
-			"$shared": ["src/shared"],
-			"$shared/*": ["src/shared/*"],
+			"$common": ["src/common"],
+			"$common/*": ["src/common/*"],
 			"$features": ["./src/features"],
 			"$features/*": ["./src/features/*"]
 		}

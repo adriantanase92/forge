@@ -1,4 +1,4 @@
-import { decodeAndParse } from "$shared/utils/helpers.js";
+import { decodeAndParse } from "$common/utils/helpers.js";
 import { fail } from "@sveltejs/kit";
 import type { FilterQuery, Model, QueryOptions, UpdateQuery } from "mongoose";
 
@@ -40,8 +40,7 @@ export const api = async (options: {
 export const getAll = async <T>(model: Model<T>, url: any) => {
 	try {
 		const page = Number(url.searchParams.get("page") ?? 0);
-		const limit = Number(url.searchParams.get("limit") ?? 0);
-		const skip = page > 0 ? (page - 1) * limit : page * limit;
+		const limitValueFromParams = url.searchParams.get("limit");
 		const sort = decodeAndParse(url.searchParams.get("sort")) ?? {
 			createdAt: -1
 		};
@@ -49,8 +48,12 @@ export const getAll = async <T>(model: Model<T>, url: any) => {
 			{ $match: { _id: { $exists: true } } }
 		];
 
-		let options = [];
-		if (limit !== 0) {
+		const options = [];
+
+		if (limitValueFromParams !== "0") {
+			const limit = Number(limitValueFromParams ?? 10);
+			const skip = page > 0 ? (page - 1) * limit : page * limit;
+
 			options.push(
 				{
 					$skip: skip
@@ -151,6 +154,7 @@ export const updateOne = async <T>(
 			success: true
 		};
 	} catch (error: any) {
+		console.log("aaaaa, eroare");
 		console.error(error.message);
 	}
 };

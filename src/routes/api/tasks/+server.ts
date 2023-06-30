@@ -1,5 +1,5 @@
 import { Task } from "$features/tasks/schemas/task.schemas.js";
-import { getAll } from "$shared/db/utils.js";
+import { getAll } from "$common/db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const GET = async ({ url }: RequestEvent) => {

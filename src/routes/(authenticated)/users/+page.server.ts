@@ -1,4 +1,4 @@
-import { api } from "$shared/db/utils.js";
+import { api } from "$common/db/utils.js";
 
 export const load = ({ fetch }) => {
 	const fetchUsers = async () => {

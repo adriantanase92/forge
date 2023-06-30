@@ -40,7 +40,7 @@ module.exports = {
 	"func-name-matching": "error",
 	// enforce the consistent use of either `function` declarations
 	// or expressions
-	"func-style": ["error", "declaration"],
+	"func-style": [],
 	// require constructor names to begin with a capital letter
 	"new-cap": [
 		"error",

@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import Loader from "$shared/components/Loader.svelte";
-	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
+	import Loader from "$common/components/Loader.svelte";
+	import ModalForm from "$common/components/Modal/ModalForm/ModalForm.svelte";
 	import {
 		submitDeleteItem,
 		actionModalForm
-	} from "$shared/components/Modal/ModalForm/helpers.js";
+	} from "$common/components/Modal/ModalForm/helpers.js";
 	import type { PageData } from "./$types.js";
 	import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
+	import { addEditFields } from "$features/permissions/forms/fields.js";
 
 	export let data: PageData;
 
 	$: ({ permissions, form } = data);
-
-	$: console.log("permissions: ", permissions);
 </script>
 
 <div>
@@ -33,15 +32,7 @@
 							id: "addPermissionForm",
 							action: "create",
 							schema: crudPermissionSchema,
-							fields: [
-								{
-									id: "name",
-									type: "text",
-									placeholder: "Enter name...",
-									labelText: "Name",
-									name: "name"
-								}
-							],
+							fields: addEditFields(),
 							messages: {
 								success: "Permission added successfully",
 								error: "Permission not added"
@@ -77,7 +68,7 @@
 										props: {
 											modalId: "updatePermissionModal",
 											form: {
-												data: form,
+												data: permission,
 												id: "updatePermissionForm",
 												action: "update",
 												schema: crudPermissionSchema,
@@ -87,16 +78,7 @@
 														value: permission.id
 													}
 												],
-												fields: [
-													{
-														id: "name",
-														type: "text",
-														placeholder: "Enter name...",
-														labelText: "Name",
-														name: "name",
-														valueData: permission.name
-													}
-												],
+												fields: addEditFields(),
 												messages: {
 													success: "Permission updated successfully.",
 													error: "Permission not updated."

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { capitalizeEveryWord } from "$shared/utils/helpers.js";
+	import { capitalizeEveryWord } from "$common/utils/helpers.js";
 	import { IconPlus } from "@tabler/icons-svelte";
 
 	export let data;

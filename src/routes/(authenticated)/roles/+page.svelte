@@ -1,32 +1,21 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { IconPencil, IconPlus, IconTrashXFilled } from "@tabler/icons-svelte";
-	import Loader from "$shared/components/Loader.svelte";
+	import Loader from "$common/components/Loader.svelte";
 	import PermissionsList from "$features/roles/components/PermissionsList.svelte";
-	import { api } from "$shared/db/utils.js";
+	import { api } from "$common/db/utils.js";
 	import { invalidate } from "$app/navigation";
-	import { onMount } from "svelte";
-	import ModalForm from "$shared/components/Modal/ModalForm/ModalForm.svelte";
+	import ModalForm from "$common/components/Modal/ModalForm/ModalForm.svelte";
 	import {
 		actionModalForm,
 		submitDeleteItem
-	} from "$shared/components/Modal/ModalForm/helpers.js";
+	} from "$common/components/Modal/ModalForm/helpers.js";
+	import { addEditFields } from "$features/roles/forms/fields.js";
+	import { crudRoleSchema } from "$features/roles/forms/validation.js";
 
 	export let data;
-	let permissions: any[] = [];
 
-	$: ({ roles } = data);
-
-	$: console.log("dat: ", data);
-
-	onMount(async () => {
-		permissions = await api({
-			fetch,
-			url: "/api/permissions",
-			method: "GET",
-			errorMessage: "Problem retrieving permissions from the database."
-		});
-	});
+	$: ({ roles, form } = data);
 
 	const updatePermissionOptionsStatesBasedOnChoice = (options: any) => {
 		let otherThingsToUpdate = {};
@@ -100,22 +89,11 @@
 					props: {
 						modalId: "addRoleModal",
 						form: {
+							data: form,
 							id: "addRoleForm",
 							action: "create",
-							dataToAppend: [
-								{
-									name: "permissions",
-									value: JSON.stringify(permissions)
-								}
-							],
-							fields: [
-								{
-									id: "name",
-									type: "text",
-									placeholder: "Enter name...",
-									labelText: "Name"
-								}
-							],
+							schema: crudRoleSchema,
+							fields: addEditFields(),
 							messages: {
 								success: "Role added successfully",
 								error: "Role not added"
@@ -149,23 +127,17 @@
 										props: {
 											modalId: "updateRoleModal",
 											form: {
+												data: { name: role.name },
 												id: "updateRoleForm",
 												action: "update",
+												schema: crudRoleSchema,
 												dataToAppend: [
 													{
 														name: "id",
 														value: role.id
 													}
 												],
-												fields: [
-													{
-														id: "name",
-														type: "text",
-														placeholder: "Enter name...",
-														labelText: "Name",
-														value: role.name
-													}
-												],
+												fields: addEditFields(),
 												messages: {
 													success: "Role updated successfully.",
 													error: "Role not updated."

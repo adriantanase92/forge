@@ -1,4 +1,4 @@
-import { api } from "$shared/db/utils.js";
+import { api } from "$common/db/utils.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = ({ fetch }) => {

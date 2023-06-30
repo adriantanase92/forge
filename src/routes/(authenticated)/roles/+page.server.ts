@@ -13,7 +13,6 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			errorMessage: "Problem retrieving roles from the database."
 		});
 	};
-
 	const form = await superValidate(crudRoleSchema);
 
 	return {
@@ -34,11 +33,32 @@ export const actions = {
 			});
 
 		const id = crypto.randomUUID();
-		const { name, permissions } = form.data;
+		const { name } = form.data;
+
+		const aggregate = encodeURI(
+			JSON.stringify([
+				{
+					$project: {
+						_id: 0,
+						__v: 0,
+						createdAt: 0,
+						updatedAt: 0
+					}
+				}
+			])
+		);
+
+		const permissions = await api({
+			fetch,
+			url: `/api/permissions?aggregate=${aggregate}`,
+			method: "GET",
+			errorMessage: "Problem retrieving permissions from the database."
+		});
+
 		const role = {
 			id,
 			name,
-			permissions: JSON.parse(permissions as any)
+			permissions: permissions.items
 		};
 
 		await api({

@@ -4,7 +4,7 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import {
 	crudRoleSchema,
-	onCreateRole
+	roleSchema
 } from "$features/roles/forms/validation.js";
 
 export const GET = async ({ url }: RequestEvent) => {
@@ -18,10 +18,7 @@ export const GET = async ({ url }: RequestEvent) => {
 
 export const POST = async ({ request }: RequestEvent) => {
 	const body = await request.json();
-	const form = await superValidate({ ...body }, onCreateRole);
-
-	console.log("role de pe server: ", { ...body });
-	console.log("form: ", form);
+	const form = await superValidate({ ...body }, roleSchema);
 
 	if (!form.valid) {
 		return new Response(JSON.stringify(form), {

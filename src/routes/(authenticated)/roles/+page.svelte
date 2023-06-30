@@ -5,7 +5,6 @@
 	import PermissionsList from "$features/roles/components/PermissionsList.svelte";
 	import { api } from "$common/db/utils.js";
 	import { invalidate } from "$app/navigation";
-	import { onMount } from "svelte";
 	import ModalForm from "$common/components/Modal/ModalForm/ModalForm.svelte";
 	import {
 		actionModalForm,
@@ -15,31 +14,8 @@
 	import { crudRoleSchema } from "$features/roles/forms/validation.js";
 
 	export let data;
-	let permissions: any = null;
 
 	$: ({ roles, form } = data);
-
-	onMount(async () => {
-		const aggregate = encodeURI(
-			JSON.stringify([
-				{
-					$project: {
-						_id: 0,
-						__v: 0,
-						createdAt: 0,
-						updatedAt: 0
-					}
-				}
-			])
-		);
-
-		permissions = await api({
-			fetch,
-			url: `/api/permissions?aggregate=${aggregate}`,
-			method: "GET",
-			errorMessage: "Problem retrieving permissions from the database."
-		});
-	});
 
 	const updatePermissionOptionsStatesBasedOnChoice = (options: any) => {
 		let otherThingsToUpdate = {};
@@ -64,6 +40,7 @@
 	};
 
 	const updatePermissionOptionForRole = async (event: any) => {
+		console.log("event.detail: ", event.detail);
 		const roleId = event.detail.roleId;
 		const roleName = event.detail.roleName;
 		const permissionName = event.detail.permissionName;
@@ -80,8 +57,13 @@
 				permissionName,
 				permissionOption,
 				permissionOptionState
-			})
+			}),
+			options: {
+				upsert: true
+			}
 		};
+
+		console.log("data: ", data);
 
 		try {
 			await api({
@@ -116,12 +98,6 @@
 							data: form,
 							id: "addRoleForm",
 							action: "create",
-							dataToAppend: [
-								{
-									name: "permissions",
-									value: JSON.stringify(permissions.items)
-								}
-							],
 							schema: crudRoleSchema,
 							fields: addEditFields(),
 							messages: {
@@ -157,9 +133,10 @@
 										props: {
 											modalId: "updateRoleModal",
 											form: {
-												data: role,
+												data: { name: role.name },
 												id: "updateRoleForm",
 												action: "update",
+												schema: crudRoleSchema,
 												dataToAppend: [
 													{
 														name: "id",

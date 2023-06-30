@@ -80,7 +80,6 @@ export const sfFormOptions: any = (props: any) => ({
 			props.form.dataToAppend !== undefined &&
 			props.form.dataToAppend.length > 0
 		) {
-			console.log("dataToAppend: ", props.form.dataToAppend);
 			props.form.dataToAppend.forEach((item: any) => {
 				data.append(item.name, item.value);
 			});
@@ -90,13 +89,11 @@ export const sfFormOptions: any = (props: any) => ({
 	},
 	onResult({ result }: any) {},
 	onUpdate({ form, cancel }: any) {
-		console.log("form onUpdate: ", form);
 		if (!form.valid) {
 			cancel();
 		}
 	},
 	onUpdated({ form }: any) {
-		console.log("form onUpdated: ", form);
 		if (!form.valid) {
 			toastStore.trigger({
 				message: props.form.messages.error,

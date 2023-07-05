@@ -6,10 +6,10 @@ import {
 } from "@skeletonlabs/skeleton";
 import type { SubmitFunction } from "@sveltejs/kit";
 import { capitalizeEveryWord } from "$common/utils/helpers.js";
-import { invalidateAll } from "$app/navigation";
+import { goto, invalidateAll } from "$app/navigation";
 
 export const submitDeleteItem: SubmitFunction = async ({ data, cancel }) => {
-	const { name, item } = Object.fromEntries(data as any);
+	const { name, item, url } = Object.fromEntries(data as any);
 	const capitalizeItem = capitalizeEveryWord(item);
 
 	const modalData = new Promise<boolean>((resolve) => {
@@ -36,7 +36,11 @@ export const submitDeleteItem: SubmitFunction = async ({ data, cancel }) => {
 						message: `${capitalizeItem} deleted successfully`,
 						background: "variant-filled-success"
 					});
-					await update();
+					if (url !== undefined) {
+						goto(url);
+					} else {
+						await update();
+					}
 					break;
 				case "failure":
 					toastStore.trigger({

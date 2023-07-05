@@ -2,10 +2,7 @@ import { Permission } from "$features/permissions/schemas/permission.schema.js";
 import { createOne, deleteOne, getAll, updateOne } from "$common/db/utils.js";
 import type { RequestEvent } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
-import {
-	crudPermissionSchema,
-	permissionSchema
-} from "$features/permissions/forms/validations.js";
+import { crudPermissionSchema } from "$features/permissions/forms/validations.js";
 
 export const GET = async ({ url }: RequestEvent) => {
 	const isOk: any = await getAll(Permission, url);

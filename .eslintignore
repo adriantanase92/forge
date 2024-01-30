@@ -1,0 +1,45 @@
+.vscode
+.postman
+.DS_Store
+tmp/
+
+node_modules
+dist
+build
+
+*.json
+
+# ENV files
+.env
+.env.*
+!.env.example
+
+# Linter files
+.eslintrc
+.prettierrc
+.ls-lint.yml
+
+# Svelte
+.svelte-kit
+svelte.config.js
+
+# Storybook
+storybook-static
+**/**/*.mdx
+
+# Unit Tests
+coverage
+reports
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Translation
+i18n-*

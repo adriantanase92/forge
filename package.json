@@ -1,0 +1,46 @@
+{
+  "workspaces": [
+    "packages/*"
+  ],
+  "name": "@forge/root",
+  "version": "1.0.0",
+  "description": "Forge application",
+  "engineStrict": true,
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9",
+    "pnpm": ">=8",
+    "yarn": "Please use pnpm"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pnpm -r build",
+    "dev": "pnpm -r build && pnpm -r dev",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --plugin-search-dir . --write .",
+    "check:ls": "ls-lint",
+    "check:format": "prettier \"**/*.{js,ts,scss,svelte,md,mdx}\" --check",
+    "check:format:fix": "prettier \"**/*.{js,ts,scss,svelte,md,mdx}\" --write"
+  },
+  "keywords": [],
+  "author": "tanase.adrian92@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@ls-lint/ls-lint": "^2.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-storybook": "^0.6.15",
+    "eslint-plugin-svelte": "^2.30.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-svelte": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.5.9"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0"
+  }
+}

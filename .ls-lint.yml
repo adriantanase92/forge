@@ -1,0 +1,38 @@
+ls:
+  src:
+    .dir: 'kebab-case | regex:_internals | regex:__tests__ | regex:__mocks__'
+    .test.ts: kebab-case
+    .queries.ts: kebab-case
+    .d.ts: kebab-case
+    .ts: kebab-case
+    .server.ts: kebab-case
+    .client.ts: kebab-case
+    .svelte: PascalCase
+    .md: PascalCase
+  src/routes:
+    .dir: >-
+      kebab-case | regex:_internals | regex:__tests__ | regex:__mocks__ |
+      regex:\[[a-z][a-zA-Z0-9]+(?:=[a-z][a-zA-Z0-9]+)?\] |
+      regex:\([a-z][a-z0-9-]+\)
+    .js: >-
+      regex:[+]page(?:[.]server)? | regex:[+]layout(?:[.]server)? |
+      regex:[+]server
+    .ts: >-
+      regex:[+]page(?:[.]server)? | regex:[+]layout(?:[.]server)? |
+      regex:[+]server
+    .svelte: 'regex:[+]page | regex:[+]layout | regex:[+]error'
+    .md: PascalCase
+  src/i18n:
+    .ts: kebab-case
+    .sync.ts: kebab-case
+    .async.ts: kebab-case
+ignore:
+  - .git
+  - .github
+  - .vscode
+  - .eslintrc.js
+  - .svelte-kit
+  - node_modules
+  - dist
+  - static
+  - storybook-static

@@ -1,0 +1,3 @@
+packages:
+  - packages/forge-main-server
+  - packages/forge-main-client

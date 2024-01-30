@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    forge-main-server:
+        build: ./packages/forge-main-server
+        ports:
+            - '3010:3010'
+        env_file:
+            - .env
+        depends_on:
+            - mongo
+        tty: true
+    forge-main-client:
+        build:
+            context: ./packages/forge-main-client
+            args:
+                - PUBLIC_MAIN_SERVER_URL=${PUBLIC_MAIN_SERVER_URL}
+                - ENCYPTION_SECRET=${ENCYPTION_SECRET}
+                - ENCYPTION_SALT=${ENCYPTION_SALT}
+                - ORIGIN=${ORIGIN}
+        ports:
+            - '3000:3000'
+        depends_on:
+            - 'forge-main-server'
+    mongo:
+        image: mongo
+        ports:
+            - '27017:27017'
+        volumes:
+            - mongo-data:/data/db
+
+volumes:
+    mongo-data:

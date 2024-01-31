@@ -149,4 +149,4 @@ docker compose down
 
 ![Permissions screen](images/permissions.png)
 
-![Add permission screen](images/add-permissions.png)
+![Add permission screen](images/add-permission.png)

@@ -22,7 +22,10 @@ export default {
 			subtitle: 'à votre panneau { appName } personnel'
 		},
 		dashboard: {
-			title: 'Mon tableau de bord'
+			title: 'Mon tableau de bord',
+			projectsTitle: 'Projets (cette année)',
+			usersInOrganization: "Utilisateurs dans l'organisation",
+			myProjects: 'Mes projets'
 		},
 		users: {
 			user: {

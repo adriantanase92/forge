@@ -134,3 +134,16 @@ export type EditTaskType = {
 } & NewTaskType;
 
 export type TaskType = EntityDocumentType & NewTaskType;
+
+export const getProjectPropertyBasedOnUserRole = (role: UserRole) => {
+	switch (role) {
+		case UserRole.CLIENT:
+			return 'clients';
+		case UserRole.WORKER:
+			return 'workers';
+		case UserRole.MANAGER:
+			return 'manager';
+		default:
+			return '';
+	}
+};

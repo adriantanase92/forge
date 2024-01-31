@@ -22,7 +22,10 @@ export default {
 			subtitle: 'naar uw persoonlijke { appName }-paneel'
 		},
 		dashboard: {
-			title: 'Mijn Dashboard'
+			title: 'Mijn Dashboard',
+			projectsTitle: 'Projecten (dit jaar)',
+			usersInOrganization: 'Gebruikers in organisatie',
+			myProjects: 'Mijn projecten'
 		},
 		users: {
 			user: {

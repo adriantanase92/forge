@@ -44,6 +44,71 @@ async function projectRoutes(app: FastifyInstance, db: Db) {
         }
     );
 
+    app.get(
+        '/projects/:userId/:property',
+        { preValidation: [authenticate] },
+        async (request, reply) => {
+            const { userId, property } = request.params as { userId: string; property: string };
+            const objectId = new ObjectId(userId);
+
+            let matchStage;
+            if (property === 'manager') {
+                matchStage = { manager: objectId };
+            } else if (['clients', 'workers'].includes(property)) {
+                matchStage = { [property]: objectId };
+            } else {
+                return reply.status(400).send({ error: 'invalid_property' });
+            }
+
+            try {
+                const projects = await db.projects
+                    .aggregate([
+                        { $match: matchStage },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'manager',
+                                foreignField: '_id',
+                                as: 'managerDetails'
+                            }
+                        },
+                        { $unwind: '$managerDetails' },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'clients',
+                                foreignField: '_id',
+                                as: 'clientDetails'
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'workers',
+                                foreignField: '_id',
+                                as: 'workerDetails'
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'tasks',
+                                localField: 'tasks',
+                                foreignField: '_id',
+                                as: 'taskDetails'
+                            }
+                        }
+                    ])
+                    .toArray();
+
+                reply.code(200).send({ data: projects });
+            } catch (e) {
+                reply
+                    .code(500)
+                    .send(formErrorObject({ errorKey: 'internal_server_error', error: e }));
+            }
+        }
+    );
+
     app.get<{ Querystring: QueryString; Params: RouteParams }>(
         '/projects/:id',
         { preValidation: [authenticate] },

@@ -66,6 +66,25 @@
 			<div class="w-full inline-flex flex-col px-3 pb-3 grow">
 				<!-- title & menu -->
 				<ul class="sidebar-menu flex flex-col">
+					<li>
+						<a
+							href={$LL.routes.protected.dashboard()}
+							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 font-secondary font-medium rounded-full {activeLink(
+								'dashboard'
+							)}"
+							target="_self"
+						>
+							{#key activeLinkIcon('dashboard')}
+								<SvgIcon
+									name="dashboard"
+									width="24"
+									height="24"
+									color={activeLinkIcon('dashboard')}
+								/>
+							{/key}
+							{$LL.menus.sidebar.dashboard()}
+						</a>
+					</li>
 					{#each sidebarUserMenuItems($LL) as item}
 						{#if item.module && $page.data.currentLoggedInUser.permissions[item.module].read}
 							<li>

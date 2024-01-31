@@ -23,13 +23,6 @@ export type allLanguagesMenuItems = menuItem[];
 export const sidebarUserMenuItems = (t: TranslationFunctions): allLanguagesMenuItems => [
 	{
 		type: 'link',
-		url: t.routes.protected.dashboard(),
-		text: t.menus.sidebar.dashboard(),
-		id: 'dashboard',
-		icon: 'dashboard'
-	},
-	{
-		type: 'link',
 		url: t.routes.protected.users(),
 		text: t.menus.sidebar.users(),
 		id: 'users',

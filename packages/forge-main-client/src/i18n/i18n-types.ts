@@ -51,6 +51,9 @@ export type PagesTranslations = {
 	};
 	dashboard: {
 		title: string;
+		projectsTitle: string;
+		usersInOrganization: string;
+		myProjects: string;
 	};
 	users: {
 		user: {
@@ -324,6 +327,9 @@ export type TranslationFunctions = {
 		};
 		dashboard: {
 			title: () => LocalizedString;
+			projectsTitle: () => LocalizedString;
+			usersInOrganization: () => LocalizedString;
+			myProjects: () => LocalizedString;
 		};
 		users: {
 			user: {

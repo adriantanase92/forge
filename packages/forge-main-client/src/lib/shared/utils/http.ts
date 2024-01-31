@@ -179,6 +179,35 @@ export const getOne = async ({
 	}
 };
 
+export const getProjectsForUser = async ({
+	fetch,
+	apiUrl,
+	id,
+	property,
+	token
+}: HttpOptionsParams & {
+	id: string;
+	property: string;
+}) => {
+	try {
+		const url = `${apiUrl}/${id}/${property}`;
+
+		const response = await api({
+			fetch,
+			url,
+			token
+		});
+
+		if ('error' in response) {
+			return { error: { error: response.error, errorKey: response.errorKey } };
+		} else {
+			return { data: response.data };
+		}
+	} catch (e) {
+		return { error: { error: e }, errorKey: 'internalServerError' };
+	}
+};
+
 export const createOne = async <T>({
 	fetch,
 	apiUrl,
